@@ -342,15 +342,28 @@ export function CardActions({
         </div>
       </div>
       <div ref={exportRef} className="pointer-events-none fixed -left-[9999px] top-0" aria-hidden>
-        <div data-export-card>
+        {/* Each export node must size to its own content. They are siblings of
+            the 1204px-wide "both" layout, and a plain block would stretch to
+            match it — which is what put a slab of dead space beside every
+            single-card PNG. */}
+        <div data-export-card style={{ width: "max-content" }}>
           <PlayerCard profile={profile} style={style} width={620} exportMode />
         </div>
-        <div data-export-back style={{ padding: 24, background: "var(--background)" }}>
+        <div
+          data-export-back
+          style={{ width: "max-content", padding: 24, background: "var(--background)" }}
+        >
           <CardBack profile={profile} style={style} width={620} exportMode />
         </div>
         <div
           data-export-both
-          style={{ display: "flex", gap: 28, padding: 28, background: "var(--background)" }}
+          style={{
+            width: "max-content",
+            display: "flex",
+            gap: 28,
+            padding: 28,
+            background: "var(--background)",
+          }}
         >
           <PlayerCard profile={profile} style={style} width={560} />
           <CardBack profile={profile} style={style} width={560} exportMode />

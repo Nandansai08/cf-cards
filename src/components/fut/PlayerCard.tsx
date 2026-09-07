@@ -88,7 +88,7 @@ export function CardShell({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 45%, color-mix(in oklab, black 22%, transparent))",
+            "linear-gradient(to bottom, transparent 45%, color-mix(in oklab, black 14%, transparent))",
         }}
       />
       {children}
@@ -140,162 +140,210 @@ export function PlayerCard({
         reveal={reveal}
         hover={!exportMode && !noHover}
       >
-        {/* header: OVR + position + avatar */}
-        <div className="relative flex items-start justify-between" style={{ gap: 8 * s }}>
-          <div className="flex flex-col items-center" style={{ minWidth: 74 * s }}>
-            <span
-              className="font-display font-bold leading-none tabular-nums"
-              style={{ fontSize: 56 * s }}
-            >
-              {profile.ovr}
-            </span>
-            <span
-              className="font-display font-semibold leading-none"
-              style={{ fontSize: 13 * s, letterSpacing: 0.06 * 13 * s }}
-            >
-              {profile.position}
-            </span>
-            <span
-              className="mt-1 block rounded-full"
-              style={{
-                width: 34 * s,
-                height: 2 * s,
-                background: "currentColor",
-                opacity: 0.45,
-              }}
-            />
-            <span
-              className="font-display font-semibold uppercase"
-              style={{ fontSize: 9 * s, marginTop: 5 * s, opacity: 0.75 }}
-            >
-              {TIER_META[tier].label}
-            </span>
-          </div>
-
-          <div
-            className="relative shrink-0 overflow-hidden"
-            style={{
-              width: 132 * s,
-              height: 132 * s,
-              borderRadius: 12 * s,
-              background: "color-mix(in oklab, black 18%, transparent)",
-            }}
-          >
-            {showAvatar ? (
-              <img
-                src={avatar}
-                alt=""
-                loading="eager"
-                referrerPolicy="no-referrer"
-                onError={onError}
-                className="h-full w-full object-cover"
+        {/* The face is a full-height column: the stat strip is pushed to the
+            bottom rather than everything piling up at the top, which used to
+            leave the lower third of the card blank. */}
+        <div className="relative flex h-full flex-col justify-between">
+          {/* header: OVR + position + avatar */}
+          <div className="flex items-start justify-between" style={{ gap: 8 * s }}>
+            <div className="flex flex-col items-center" style={{ minWidth: 74 * s }}>
+              <span
+                className="font-display font-bold leading-none tabular-nums"
+                style={{ fontSize: 56 * s }}
+              >
+                {profile.ovr}
+              </span>
+              <span
+                className="font-display font-semibold leading-none"
+                style={{ fontSize: 13 * s, letterSpacing: 0.06 * 13 * s }}
+              >
+                {profile.position}
+              </span>
+              <span
+                className="mt-1 block rounded-full"
+                style={{
+                  width: 34 * s,
+                  height: 2 * s,
+                  background: "currentColor",
+                  opacity: 0.45,
+                }}
               />
-            ) : (
-              <div
-                aria-label={`${profile.handle} initials`}
-                className="flex h-full w-full items-center justify-center border border-current/20 font-display font-bold"
-                style={{ fontSize: 44 * s }}
-              >
-                {profile.handle
-                  .replace(/[^A-Za-z0-9]/g, "")
-                  .slice(0, 2)
-                  .toUpperCase() || "CF"}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* name band */}
-        <div className="relative" style={{ marginTop: 8 * s }}>
-          <div
-            className="flex items-center justify-center gap-2 border-y text-center"
-            style={{
-              borderColor: "color-mix(in oklab, currentColor 30%, transparent)",
-              paddingTop: 5 * s,
-              paddingBottom: 5 * s,
-            }}
-          >
-            <span
-              className="font-display font-bold uppercase leading-none"
-              style={{
-                fontSize: Math.min(24, 260 / Math.max(6, profile.handle.length) + 6) * s,
-                letterSpacing: "0.02em",
-              }}
-            >
-              {profile.handle}
-            </span>
-          </div>
-          <div
-            className="flex items-center justify-center gap-2 font-display uppercase"
-            style={{ fontSize: 10 * s, marginTop: 5 * s, opacity: 0.85 }}
-          >
-            <span>{profile.stats.rank}</span>
-            <span style={{ opacity: 0.5 }}>•</span>
-            <span className="tabular-nums">{profile.stats.currentRating || "unrated"}</span>
-            {flag && (
-              <>
-                <span style={{ opacity: 0.5 }}>•</span>
-                <span>
-                  {flag} {profile.data.info.country}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* attributes */}
-        <div
-          className="relative grid grid-cols-2"
-          style={{ marginTop: 10 * s, rowGap: 3 * s, columnGap: 14 * s }}
-        >
-          {ATTR_ORDER.map((k) => (
-            <div key={k} className="flex items-center justify-between" style={{ gap: 6 * s }}>
               <span
-                className="font-display font-bold tabular-nums"
-                style={{ fontSize: 17 * s, minWidth: 26 * s }}
+                className="font-display font-semibold uppercase"
+                style={{ fontSize: 9 * s, marginTop: 5 * s, opacity: 0.75 }}
               >
-                {profile.attrs[k]}
-              </span>
-              <span
-                className="font-display font-semibold"
-                style={{ fontSize: 12 * s, opacity: 0.8, letterSpacing: "0.08em" }}
-              >
-                {k}
-              </span>
-              <span
-                className="flex-1 overflow-hidden rounded-full"
-                style={{ height: 3 * s, background: "color-mix(in oklab, black 22%, transparent)" }}
-              >
-                <span
-                  className="block h-full rounded-full"
-                  style={{
-                    width: `${profile.attrs[k]}%`,
-                    background: "currentColor",
-                    opacity: 0.85,
-                  }}
-                />
+                {TIER_META[tier].label}
               </span>
             </div>
-          ))}
-        </div>
 
-        {/* footer */}
-        <div
-          className="absolute inset-x-0 flex items-center justify-between"
-          style={{ bottom: 10 * s, paddingInline: 16 * s }}
-        >
-          <span
-            className="font-display font-bold uppercase"
-            style={{ fontSize: 8.5 * s, letterSpacing: "0.16em", opacity: 0.8 }}
+            <div
+              className="relative shrink-0 overflow-hidden"
+              style={{
+                // Portrait proportions, not a thumbnail: it reaches down to
+                // the name band, so the header has something to sit against.
+                width: 152 * s,
+                height: 196 * s,
+                borderRadius: 12 * s,
+                background: "color-mix(in oklab, black 18%, transparent)",
+              }}
+            >
+              {showAvatar ? (
+                <img
+                  src={avatar}
+                  alt=""
+                  loading="eager"
+                  referrerPolicy="no-referrer"
+                  onError={onError}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div
+                  aria-label={`${profile.handle} initials`}
+                  className="flex h-full w-full items-center justify-center border border-current/20 font-display font-bold"
+                  style={{ fontSize: 44 * s }}
+                >
+                  {profile.handle
+                    .replace(/[^A-Za-z0-9]/g, "")
+                    .slice(0, 2)
+                    .toUpperCase() || "CF"}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* name band */}
+          <div className="relative" style={{ marginTop: 8 * s }}>
+            <div
+              className="flex items-center justify-center gap-2 border-y text-center"
+              style={{
+                borderColor: "color-mix(in oklab, currentColor 30%, transparent)",
+                paddingTop: 5 * s,
+                paddingBottom: 5 * s,
+              }}
+            >
+              <span
+                className="font-display font-bold uppercase leading-none"
+                style={{
+                  fontSize: Math.min(24, 260 / Math.max(6, profile.handle.length) + 6) * s,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {profile.handle}
+              </span>
+            </div>
+            <div
+              className="flex items-center justify-center gap-2 font-display uppercase"
+              style={{ fontSize: 10 * s, marginTop: 5 * s, opacity: 0.85 }}
+            >
+              <span>{profile.stats.rank}</span>
+              <span style={{ opacity: 0.5 }}>•</span>
+              <span className="tabular-nums">{profile.stats.currentRating || "unrated"}</span>
+              {flag && (
+                <>
+                  <span style={{ opacity: 0.5 }}>•</span>
+                  <span>
+                    {flag} {profile.data.info.country}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* attributes */}
+          <div
+            className="relative grid grid-cols-2"
+            style={{ marginTop: 10 * s, rowGap: 9 * s, columnGap: 14 * s }}
           >
-            Codeforces Cards
-          </span>
-          <span
-            className="font-display font-semibold tabular-nums"
-            style={{ fontSize: 8.5 * s, letterSpacing: "0.1em", opacity: 0.8 }}
+            {ATTR_ORDER.map((k) => (
+              <div key={k} className="flex items-center justify-between" style={{ gap: 6 * s }}>
+                <span
+                  className="font-display font-bold tabular-nums"
+                  style={{ fontSize: 17 * s, minWidth: 26 * s }}
+                >
+                  {profile.attrs[k]}
+                </span>
+                <span
+                  className="font-display font-semibold"
+                  style={{ fontSize: 12 * s, opacity: 0.8, letterSpacing: "0.08em" }}
+                >
+                  {k}
+                </span>
+                <span
+                  className="flex-1 overflow-hidden rounded-full"
+                  style={{
+                    height: 3 * s,
+                    background: "color-mix(in oklab, black 22%, transparent)",
+                  }}
+                >
+                  <span
+                    className="block h-full rounded-full"
+                    style={{
+                      width: `${profile.attrs[k]}%`,
+                      background: "currentColor",
+                      opacity: 0.85,
+                    }}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Career line. Real data, and it gives the lower third of the card
+            something to hold — it used to be empty space above the footer. */}
+          <div
+            className="relative grid grid-cols-3 border-t text-center"
+            style={{
+              borderColor: "color-mix(in oklab, currentColor 25%, transparent)",
+              paddingTop: 9 * s,
+              columnGap: 6 * s,
+            }}
           >
-            POT {profile.potential}
-          </span>
+            {(
+              [
+                ["Solved", profile.stats.solved],
+                ["Contests", profile.stats.contests],
+                ["Peak", profile.stats.maxRating || "—"],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="flex flex-col items-center">
+                <span
+                  className="font-display font-bold leading-none tabular-nums"
+                  style={{ fontSize: 19 * s }}
+                >
+                  {value}
+                </span>
+                <span
+                  className="font-display font-semibold uppercase leading-none"
+                  style={{
+                    fontSize: 8 * s,
+                    letterSpacing: "0.14em",
+                    opacity: 0.7,
+                    marginTop: 4 * s,
+                  }}
+                >
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer sits in the column rather than pinned to the card edge, so
+            the spacing between it and the career line is distributed with
+            everything else instead of being guessed at. */}
+          <div className="relative flex items-center justify-between" style={{ marginTop: 10 * s }}>
+            <span
+              className="font-display font-bold uppercase"
+              style={{ fontSize: 8.5 * s, letterSpacing: "0.16em", opacity: 0.8 }}
+            >
+              Codeforces Cards
+            </span>
+            <span
+              className="font-display font-semibold tabular-nums"
+              style={{ fontSize: 8.5 * s, letterSpacing: "0.1em", opacity: 0.8 }}
+            >
+              POT {profile.potential}
+            </span>
+          </div>
         </div>
       </CardShell>
     </div>

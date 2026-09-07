@@ -177,52 +177,57 @@
   box-shadow: var(--shadow-elevated);
 }
 
-/* ---------- Card tiers ---------- */
+/* ---------- Card tiers ----------
+   Every tier keeps one ink colour against a gradient that stays inside a
+   narrow lightness band. The mid stop used to fall to L 0.32-0.45 — which is
+   exactly where the name and attributes sit — so dark text ran at roughly
+   2.5:1 there and the card read as muddy. Hue and chroma are unchanged; only
+   the lightness of the mid stop moved. */
 .tier {
-  --tier-a: oklch(0.8 0.05 260);
-  --tier-b: oklch(0.45 0.04 260);
+  --tier-a: oklch(0.82 0.05 260);
+  --tier-b: oklch(0.64 0.05 260);
   --tier-ink: oklch(0.16 0.02 260);
   --tier-glow: oklch(0.8 0.05 260);
 }
 .tier-bronze {
-  --tier-a: oklch(0.78 0.09 58);
-  --tier-b: oklch(0.42 0.08 45);
+  --tier-a: oklch(0.8 0.09 58);
+  --tier-b: oklch(0.62 0.1 45);
   --tier-ink: oklch(0.2 0.04 45);
   --tier-glow: oklch(0.72 0.11 55);
 }
 .tier-silver {
-  --tier-a: oklch(0.92 0.01 250);
-  --tier-b: oklch(0.55 0.015 255);
+  --tier-a: oklch(0.93 0.01 250);
+  --tier-b: oklch(0.69 0.02 255);
   --tier-ink: oklch(0.2 0.02 255);
   --tier-glow: oklch(0.88 0.02 250);
 }
 .tier-gold {
-  --tier-a: oklch(0.92 0.11 95);
-  --tier-b: oklch(0.6 0.13 68);
+  --tier-a: oklch(0.93 0.11 95);
+  --tier-b: oklch(0.69 0.13 68);
   --tier-ink: oklch(0.22 0.05 70);
   --tier-glow: oklch(0.85 0.15 88);
 }
 .tier-rare-gold {
   --tier-a: oklch(0.96 0.09 100);
-  --tier-b: oklch(0.5 0.11 55);
+  --tier-b: oklch(0.67 0.13 55);
   --tier-ink: oklch(0.18 0.04 70);
   --tier-glow: oklch(0.9 0.16 92);
 }
 .tier-epic {
-  --tier-a: oklch(0.82 0.17 320);
-  --tier-b: oklch(0.36 0.16 300);
-  --tier-ink: oklch(0.98 0.01 300);
+  --tier-a: oklch(0.84 0.16 320);
+  --tier-b: oklch(0.63 0.17 305);
+  --tier-ink: oklch(0.18 0.05 310);
   --tier-glow: oklch(0.72 0.22 325);
 }
 .tier-icon {
-  --tier-a: oklch(0.88 0.11 205);
-  --tier-b: oklch(0.32 0.09 240);
-  --tier-ink: oklch(0.98 0.01 220);
+  --tier-a: oklch(0.89 0.11 205);
+  --tier-b: oklch(0.64 0.12 225);
+  --tier-ink: oklch(0.18 0.04 220);
   --tier-glow: oklch(0.8 0.15 205);
 }
 .tier-legendary {
-  --tier-a: oklch(0.97 0.12 105);
-  --tier-b: oklch(0.32 0.11 300);
+  --tier-a: oklch(0.96 0.12 105);
+  --tier-b: oklch(0.64 0.14 300);
   --tier-ink: oklch(0.16 0.03 280);
   --tier-glow: oklch(0.9 0.18 110);
 }
