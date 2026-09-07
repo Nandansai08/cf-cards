@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueries } from "@tanstack/react-query";
-import { ArrowRight, BarChart3, Layers, Sparkles, Swords, Trophy } from "lucide-react";
+import { ArrowRight, Layers, Swords, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HandleForm } from "@/components/fut/HandleForm";
 import { PlayerCard, PlayerCardSkeleton } from "@/components/fut/PlayerCard";
@@ -40,10 +40,7 @@ function Landing() {
       <section className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-display text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              <Sparkles className="h-3.5 w-3.5" /> Season 26
-            </span>
-            <h1 className="mt-5 font-display text-4xl font-bold uppercase leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="font-display text-4xl font-bold uppercase leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               Turn your Codeforces stats into a{" "}
               <span className="text-gradient-gold">player card.</span>
             </h1>
@@ -74,11 +71,11 @@ function Landing() {
 
           <div className="relative flex justify-center">
             <div
-              className="absolute inset-0 -z-10 animate-pulse-glow rounded-full blur-3xl"
-              style={{ background: "var(--gradient-gold)", opacity: 0.18 }}
+              className="absolute inset-0 -z-10 rounded-full blur-3xl"
+              style={{ background: "var(--gradient-gold)", opacity: 0.14 }}
             />
             {cards[0]?.data ? (
-              <div className="animate-float">
+              <div>
                 <PlayerCard profile={cards[0].data} width={320} reveal />
               </div>
             ) : (
@@ -129,7 +126,7 @@ function Landing() {
         </div>
         <div className="panel mt-6 p-5">
           <h3 className="flex items-center gap-2 font-display text-lg font-bold uppercase tracking-wide">
-            <BarChart3 className="h-5 w-5 text-primary" /> How is this calculated?
+            How is this calculated?
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
             Each attribute is scaled 1–99. Counts (problems, contests, tags) use a logarithmic
@@ -156,10 +153,7 @@ function Landing() {
                 <p className="font-display text-sm font-bold uppercase tracking-wider">
                   {TIER_META[t].label}
                 </p>
-                <p className="font-display text-xs opacity-80">
-                  OVR {TIER_META[t].min}
-                  {t === "legendary" ? "+" : "+"}
-                </p>
+                <p className="font-display text-xs opacity-80">OVR {TIER_META[t].min}+</p>
               </div>
             </div>
           ))}

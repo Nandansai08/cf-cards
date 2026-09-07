@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Trophy } from "lucide-react";
 import { fetchManyInfo, avatarUrl, countryFlagEmoji, type CFUserInfo } from "@/lib/codeforces";
 import { readRoster, SEED_HANDLES, type RosterEntry } from "@/lib/roster";
 import { Input } from "@/components/ui/input";
@@ -117,9 +116,8 @@ function LeaderboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <h1 className="flex items-center gap-3 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
-        <Trophy className="h-8 w-8 text-primary" /> Leader
-        <span className="text-gradient-gold">board</span>
+      <h1 className="font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
+        Leader<span className="text-gradient-gold">board</span>
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
         Card metrics (OVR, potential, solved, contests) appear for players whose card has been

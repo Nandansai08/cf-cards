@@ -110,30 +110,14 @@ export function PlayerCard({
   const glow = style?.glow ?? true;
   const s = width / 320; // scale factor
   const avatar = avatarUrl(profile.data.info);
-  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const flag = countryFlagEmoji(profile.data.info.country);
 
-  useEffect(() => {
-    if (!avatar || exportMode) return;
-    const controller = new AbortController();
-    let objectUrl: string | null = null;
-    void fetch(avatar, { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok || !response.headers.get("content-type")?.startsWith("image/"))
-          return null;
-        return response.blob();
-      })
-      .then((blob) => {
-        if (!blob || controller.signal.aborted) return;
-        objectUrl = URL.createObjectURL(blob);
-        setAvatarSrc(objectUrl);
-      })
-      .catch(() => undefined);
-    return () => {
-      controller.abort();
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-    };
-  }, [avatar, exportMode]);
+  // Codeforces user pictures are cross-origin and would taint the canvas that
+  // html-to-image draws into, so PNG export always falls back to initials.
+  // `broken` covers the handles whose picture 404s or is hotlink-blocked.
+  const [broken, setBroken] = useState(false);
+  useEffect(() => setBroken(false), [avatar]);
+  const showAvatar = !!avatar && !exportMode && !broken;
 
   return (
     <div
@@ -196,8 +180,15 @@ export function PlayerCard({
               background: "color-mix(in oklab, black 18%, transparent)",
             }}
           >
-            {avatarSrc ? (
-              <img src={avatarSrc} alt="" loading="eager" className="h-full w-full object-cover" />
+            {showAvatar ? (
+              <img
+                src={avatar}
+                alt=""
+                loading="eager"
+                referrerPolicy="no-referrer"
+                onError={() => setBroken(true)}
+                className="h-full w-full object-cover"
+              />
             ) : (
               <div
                 aria-label={`${profile.handle} initials`}

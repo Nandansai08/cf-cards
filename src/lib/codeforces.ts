@@ -198,13 +198,31 @@ export async function fetchPlayerData(rawHandle: string): Promise<CFPlayerData> 
   return data;
 }
 
+const AVATAR_HOSTS = new Set([
+  "userpic.codeforces.org",
+  "userpic.codeforces.com",
+  "codeforces.org",
+  "codeforces.com",
+  "sta.codeforces.com",
+]);
+
+/**
+ * Absolute https URL for a user's picture, or "" if there isn't a usable one.
+ * Loaded straight from Codeforces as a plain <img>, so the app stays fully
+ * static. Restricted to known Codeforces hosts so a hostile API response
+ * can't point the card at an arbitrary origin.
+ */
 export function avatarUrl(info: CFUserInfo): string {
   const raw = info.titlePhoto ?? info.avatar ?? "";
   if (!raw) return "";
   const abs = raw.startsWith("//") ? `https:${raw}` : raw;
-  if (!abs.startsWith("https://")) return abs;
-  // Proxied through our own origin so avatars are usable in canvas/PNG export.
-  return `/api/public/avatar?url=${encodeURIComponent(abs)}`;
+  try {
+    const url = new URL(abs);
+    if (url.protocol !== "https:" || !AVATAR_HOSTS.has(url.hostname)) return "";
+    return url.toString();
+  } catch {
+    return "";
+  }
 }
 
 export function countryFlagEmoji(country?: string): string {

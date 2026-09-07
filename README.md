@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-e9b91d.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-46d67f.svg)](CONTRIBUTING.md)
 
+**Live: <https://nandansai08.github.io/cf-cards/>**
+
 Turn any Codeforces handle into a collectible, Ultimate-Team-style player card:
 an overall rating (OVR), six attributes, a rarity tier, playstyle badges,
 achievements and full rating history — all computed from public Codeforces data.
@@ -56,17 +58,22 @@ with a small gap to respect Codeforces rate limits and cached in the browser for
 30 minutes. Country and organization are shown only when Codeforces publishes
 them; nothing is fabricated.
 
-Codeforces serves user avatars without CORS headers, which breaks canvas-based
-PNG export, so avatars are proxied through `/api/public/avatar` (that route
-allow-lists Codeforces hosts only).
+User pictures are loaded straight from Codeforces as ordinary images, and the
+URL is checked against a list of known Codeforces hosts first. They are
+cross-origin, so they would taint the canvas that PNG export draws into —
+exported cards therefore always show the handle's initials rather than the
+photo.
 
 ## Tech stack
 
-- [TanStack Start](https://tanstack.com/start) (file-based routing, SSR) + TanStack Router / Query
+- [TanStack Start](https://tanstack.com/start) (file-based routing) + TanStack Router / Query
 - React 19 + TypeScript
 - Tailwind CSS v4 with an oklch semantic token system
 - shadcn/ui (new-york) + Radix primitives
 - Recharts for the rating history chart, `html-to-image` for PNG export
+
+No backend, no database, no environment variables — the browser talks to the
+Codeforces API directly.
 
 ## Development
 
@@ -84,13 +91,40 @@ not edit it by hand). The rating engine is `src/lib/fut.ts`, the Codeforces
 client is `src/lib/codeforces.ts`, and the card components are in
 `src/components/fut/`.
 
-Before pushing, run the same three checks CI runs:
+Before pushing, run the same checks CI runs:
 
 ```sh
 npm run lint
 npx tsc --noEmit
 npm run build
+npm run build:pages
 ```
+
+## Deployment
+
+The site is a fully static single-page app, published to GitHub Pages by
+`.github/workflows/deploy-pages.yml` on every push to the default branch.
+
+```sh
+BASE_PATH=/cf-cards/ npm run build:pages   # -> dist/pages, ready to upload
+```
+
+`npm run build:pages` differs from `npm run build` in three ways, because Pages
+is a file host with no server:
+
+- nitro is skipped, so there is no server bundle
+- TanStack Start renders a single shell, which the post-build step copies to
+  both `index.html` and `404.html` so deep links like `/player/tourist` reach
+  the client router instead of GitHub's 404 page
+- `BASE_PATH` prefixes every asset and route, since the site is served from a
+  subpath rather than a domain root
+
+`.nojekyll` is written into the output as well — without it GitHub would strip
+the `assets/` directory, because Jekyll ignores paths starting with `_`.
+
+There is no server-side code and no build secret, so the app can be hosted on
+any static host. Avatars load straight from Codeforces; if a picture is missing
+or hotlink-blocked the card falls back to the handle's initials.
 
 ## Contributing
 

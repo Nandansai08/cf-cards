@@ -17,7 +17,6 @@ import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as PackRouteImport } from './routes/pack'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as PlayerHandleRouteImport } from './routes/player.$handle'
-import { Route as ApiPublicAvatarRouteImport } from './routes/api/public/avatar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,11 +58,6 @@ const PlayerHandleRoute = PlayerHandleRouteImport.update({
   path: '/player/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicAvatarRoute = ApiPublicAvatarRouteImport.update({
-  id: '/api/public/avatar',
-  path: '/api/public/avatar',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,7 +68,6 @@ export interface FileRoutesByFullPath {
   '/pack': typeof PackRoute
   '/squad': typeof SquadRoute
   '/player/$handle': typeof PlayerHandleRoute
-  '/api/public/avatar': typeof ApiPublicAvatarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +78,6 @@ export interface FileRoutesByTo {
   '/pack': typeof PackRoute
   '/squad': typeof SquadRoute
   '/player/$handle': typeof PlayerHandleRoute
-  '/api/public/avatar': typeof ApiPublicAvatarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +89,6 @@ export interface FileRoutesById {
   '/pack': typeof PackRoute
   '/squad': typeof SquadRoute
   '/player/$handle': typeof PlayerHandleRoute
-  '/api/public/avatar': typeof ApiPublicAvatarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +101,6 @@ export interface FileRouteTypes {
     | '/pack'
     | '/squad'
     | '/player/$handle'
-    | '/api/public/avatar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,7 +111,6 @@ export interface FileRouteTypes {
     | '/pack'
     | '/squad'
     | '/player/$handle'
-    | '/api/public/avatar'
   id:
     | '__root__'
     | '/'
@@ -132,7 +121,6 @@ export interface FileRouteTypes {
     | '/pack'
     | '/squad'
     | '/player/$handle'
-    | '/api/public/avatar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,7 +132,6 @@ export interface RootRouteChildren {
   PackRoute: typeof PackRoute
   SquadRoute: typeof SquadRoute
   PlayerHandleRoute: typeof PlayerHandleRoute
-  ApiPublicAvatarRoute: typeof ApiPublicAvatarRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,13 +192,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/avatar': {
-      id: '/api/public/avatar'
-      path: '/api/public/avatar'
-      fullPath: '/api/public/avatar'
-      preLoaderRoute: typeof ApiPublicAvatarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -224,7 +204,6 @@ const rootRouteChildren: RootRouteChildren = {
   PackRoute: PackRoute,
   SquadRoute: SquadRoute,
   PlayerHandleRoute: PlayerHandleRoute,
-  ApiPublicAvatarRoute: ApiPublicAvatarRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

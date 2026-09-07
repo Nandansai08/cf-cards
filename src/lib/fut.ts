@@ -101,13 +101,11 @@ export interface FormEntry {
 }
 
 export interface Badge {
-  icon: string;
   label: string;
   reason: string;
 }
 
 export interface Achievement {
-  icon: string;
   label: string;
   detail: string;
   unlocked: boolean;
@@ -326,45 +324,38 @@ function buildBadges(attrs: Attributes, s: Stats): Badge[] {
   const out: Badge[] = [];
   if (attrs.SHO >= 78)
     out.push({
-      icon: "🧠",
       label: "PROBLEM SOLVER",
       reason: `Top-10 solved average ${s.top10Avg}`,
     });
   if (attrs.PAC >= 72)
     out.push({
-      icon: "⚡",
       label: "SPEED DEMON",
       reason: `${s.gain12m >= 0 ? "+" : ""}${s.gain12m} rating in 12 months`,
     });
   if (s.contests >= 40)
-    out.push({ icon: "🔥", label: "CONTEST GRINDER", reason: `${s.contests} rated contests` });
+    out.push({ label: "CONTEST GRINDER", reason: `${s.contests} rated contests` });
   if (s.solved2200 >= 15)
     out.push({
-      icon: "💀",
       label: "HARD PROBLEM HUNTER",
       reason: `${s.solved2200} problems rated 2200+`,
     });
   if (attrs.PAC >= 68 && s.contests <= 40 && s.gain12m > 150)
-    out.push({ icon: "📈", label: "RISING STAR", reason: "Fast climb over a short career" });
+    out.push({ label: "RISING STAR", reason: "Fast climb over a short career" });
   if (attrs.PAS >= 82)
     out.push({
-      icon: "🏆",
       label: "CONTEST BEAST",
       reason: `Rating ${s.currentRating} with ${Math.round(s.positiveShare * 100)}% non-negative contests`,
     });
   if (s.topTags[0] && s.solved > 40 && s.topTags[0].count / Math.max(1, s.solved) > 0.42)
     out.push({
-      icon: "🎯",
       label: "SPECIALIST",
       reason: `${s.topTags[0].count} solves tagged "${s.topTags[0].tag}"`,
     });
   if (attrs.DRI >= 78)
-    out.push({ icon: "🛠", label: "VERSATILE", reason: `${s.distinctTags} distinct tags solved` });
-  if (s.solved >= 700)
-    out.push({ icon: "📚", label: "VOLUME KING", reason: `${s.solved} problems solved` });
+    out.push({ label: "VERSATILE", reason: `${s.distinctTags} distinct tags solved` });
+  if (s.solved >= 700) out.push({ label: "VOLUME KING", reason: `${s.solved} problems solved` });
   if (out.length === 0)
     out.push({
-      icon: "🌱",
       label: "ROOKIE",
       reason: "Early contest record — more rated results are needed",
     });
@@ -392,14 +383,12 @@ const RANK_MIN_RATING: Record<string, number> = {
 function buildAchievements(s: Stats): Achievement[] {
   const out: Achievement[] = [];
   out.push({
-    icon: "🎬",
     label: "First Contest",
     detail: s.contests ? "Debut logged" : "Play a rated contest",
     unlocked: s.contests >= 1,
   });
   for (const n of [100, 500, 1000, 2000]) {
     out.push({
-      icon: "✅",
       label: `${n} Problems`,
       detail: `${s.solved} solved`,
       unlocked: s.solved >= n,
@@ -407,7 +396,6 @@ function buildAchievements(s: Stats): Achievement[] {
   }
   for (const [rank, label] of RANK_MILESTONES) {
     out.push({
-      icon: "🎖",
       label,
       detail: `Needs ${RANK_MIN_RATING[rank]} rating`,
       unlocked: s.maxRating >= (RANK_MIN_RATING[rank] ?? 9999),
@@ -415,14 +403,12 @@ function buildAchievements(s: Stats): Achievement[] {
   }
   for (const n of [10, 50, 100]) {
     out.push({
-      icon: "🏟",
       label: `${n} Contests`,
       detail: `${s.contests} played`,
       unlocked: s.contests >= n,
     });
   }
   out.push({
-    icon: "👑",
     label: "Peak Rating",
     detail: s.maxRating ? `Peak ${s.maxRating}` : "No rated contests yet",
     unlocked: s.maxRating > 0,

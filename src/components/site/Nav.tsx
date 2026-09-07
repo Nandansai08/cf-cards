@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -55,9 +55,7 @@ export function Nav() {
             size="sm"
             className="hidden font-display uppercase tracking-wider sm:inline-flex"
           >
-            <Link to="/generate">
-              <Sparkles className="mr-1 h-4 w-4" /> Generate Card
-            </Link>
+            <Link to="/generate">Generate Card</Link>
           </Button>
           <button
             type="button"

@@ -25,9 +25,9 @@ Things worth reporting:
 - Cross-site scripting or HTML injection, particularly anywhere a Codeforces
   handle, contest name, problem tag or organization string is rendered — that
   content comes from an external API and is attacker-influenceable
-- Abuse of the avatar proxy at `/api/public/avatar`: server-side request
-  forgery, requests reaching hosts outside the Codeforces allow-list, or using
-  it as an open proxy
+- Anything that causes the app to load a script, image or stylesheet from a
+  host the project does not control — user picture URLs come from the API and
+  are checked against a Codeforces host list before use
 - Anything that lets one visitor read or tamper with another visitor's data
 - Dependency vulnerabilities that are actually reachable from this app's code
 
@@ -41,13 +41,13 @@ Out of scope:
 
 ## Notes for reporters
 
-This app has no user accounts, no database, no server-side sessions and no
-secrets. Everything it stores lives in the visitor's own `localStorage`
-(cached Codeforces responses and locally generated cards), and everything it
-reads comes from the public Codeforces API. The only server-side code is the
-avatar proxy in `src/routes/api/public/avatar.ts`, which is restricted to a
-fixed allow-list of Codeforces hosts — that route is the most interesting place
-to look.
+This app has no user accounts, no database, no sessions, no secrets and no
+server: it is published to GitHub Pages as static files. Everything it stores
+lives in the visitor's own `localStorage` (cached Codeforces responses and
+locally generated cards), and everything it reads comes from the public
+Codeforces API. That means the interesting attack surface is what the app does
+with API responses it did not author — handles, contest names, tags,
+organizations and user picture URLs.
 
 If you find a hardcoded credential anywhere in this repository, that is a bug
 worth reporting regardless of exploitability: there should never be one.

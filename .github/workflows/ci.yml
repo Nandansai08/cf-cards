@@ -33,5 +33,10 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
-      - name: Build
+      - name: Build (server)
         run: npm run build
+
+      - name: Build (static site, what GitHub Pages publishes)
+        run: npm run build:pages
+        env:
+          BASE_PATH: /cf-cards/

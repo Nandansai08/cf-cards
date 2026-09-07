@@ -229,6 +229,11 @@ function DeltaPill({ delta }: { delta: number }) {
   );
 }
 
+/** Absolute, shareable URL for a player page, honouring the deploy base path. */
+function playerUrl(handle: string): string {
+  return new URL(`player/${handle}`, window.location.origin + import.meta.env.BASE_URL).toString();
+}
+
 export function CardActions({
   profile,
   style,
@@ -269,7 +274,7 @@ export function CardActions({
 
   async function copyLink() {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/player/${profile.handle}`);
+      await navigator.clipboard.writeText(playerUrl(profile.handle));
       toast.success("Card link copied");
     } catch {
       toast.error("Copy failed — you can copy the URL from the address bar.");
@@ -277,7 +282,7 @@ export function CardActions({
   }
 
   async function share() {
-    const url = `${window.location.origin}/player/${profile.handle}`;
+    const url = playerUrl(profile.handle);
     if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
         await navigator.share({
