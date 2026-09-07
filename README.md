@@ -197,5 +197,18 @@ Found a security problem? Please report it privately — see
 
 ## Notes
 
-Unofficial fan project. Not affiliated with Codeforces or with any football-game
-publisher. The card design is original and inspired by collectible sports cards.
+Independent project. Data comes from the public Codeforces API; the card design
+is original and inspired by collectible sports cards.
+
+### Search visibility
+
+`npm run build:pages` writes a real `index.html` for every static route, because
+GitHub Pages serves `404.html` with an HTTP 404 status and search engines do not
+index a page that answers 404 — without those files only the home page was
+indexable. It also writes `sitemap.xml` from `SITE_URL`.
+
+Two things are worth knowing. `robots.txt` is only honoured at the origin root,
+so `…github.io/cf-cards/robots.txt` is ignored by crawlers — submit the sitemap
+in Google Search Console instead, or move the site to a custom domain. And no
+amount of markup substitutes for being linked to: a new site with no inbound
+links takes weeks to rank for anything.

@@ -74,6 +74,17 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+/**
+ * Absolute origin + base path of the deployed site.
+ *
+ * Open Graph, canonical links and the sitemap all need absolute URLs, and the
+ * prerendered shell is built with no request to derive one from — so the
+ * deploy passes it in and this is the local default.
+ */
+const SITE_URL = (
+  import.meta.env["VITE_SITE_URL"] ?? "https://nandansai08.github.io/cf-cards"
+).replace(/\/+$/, "");
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -83,10 +94,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Turn any Codeforces handle into a collectible Ultimate-Team style player card with OVR, attributes and rarity.",
+          "Turn any Codeforces handle into a football-style player card: OVR, six attributes, rarity and badges, all calculated from public contest data.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Codeforces Cards" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: `${SITE_URL}/og.png` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_URL}/og.png` },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -97,6 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap",
       },
       { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.ico`, type: "image/x-icon" },
+      { rel: "canonical", href: SITE_URL },
     ],
   }),
   shellComponent: RootShell,

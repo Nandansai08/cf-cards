@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Enter a Codeforces handle and get a collectible Ultimate-Team style player card: OVR, six attributes, rarity, badges and achievements from real contest data.",
+          "Enter a Codeforces handle and get a football-style player card: an OVR rating, six attributes, a rarity tier, badges and achievements, all calculated from real contest and submission history.",
       },
       { property: "og:title", content: "Codeforces Cards — Your Codeforces Player Card" },
       {
@@ -46,6 +46,13 @@ function Landing() {
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
               Your rating. Your contests. Your grind. Your Codeforces card.
+            </p>
+            {/* Plain prose naming what this is. The hero above is a slogan, and
+                a slogan gives a search engine nothing to match a query to. */}
+            <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+              Codeforces Cards turns any competitive programming profile into a football-style
+              trading card — an OVR rating, six attributes, a rarity tier and a career line, all
+              calculated from public contest and submission history.
             </p>
             <div className="mt-8 max-w-xl">
               <HandleForm onSubmit={go} />

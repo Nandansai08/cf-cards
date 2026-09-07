@@ -32,7 +32,7 @@ test("ranks the cards generated on this device", async ({ page }) => {
 
   await page.goto("/leaderboard");
 
-  const rows = page.locator("ul > li");
+  const rows = page.locator("main ul > li");
   await expect(rows).toHaveCount(2);
   // demo_solver is by far the strongest of the three, so it leads on OVR.
   await expect(rows.first()).toContainText(/demo_solver/i);
@@ -47,5 +47,5 @@ test("featured players only offer the ranking their data supports", async ({ pag
   // offer here — showing an empty "Highest OVR" table would just look broken.
   await expect(page.getByRole("button", { name: "Highest rating" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Highest OVR" })).toHaveCount(0);
-  await expect(page.locator("ul > li").first()).toBeVisible();
+  await expect(page.locator("main ul > li").first()).toBeVisible();
 });

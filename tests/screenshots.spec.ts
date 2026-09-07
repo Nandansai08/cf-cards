@@ -2,7 +2,8 @@ import { test } from "@playwright/test";
 import { stubCodeforces } from "./fixtures/codeforces";
 
 /**
- * Not a test — this regenerates the images in README.md.
+ * Not a test — this regenerates the images in README.md, plus the social
+ * preview card that link unfurls use.
  *
  *   npm run screenshots
  *
@@ -41,6 +42,19 @@ test.describe("desktop", () => {
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1500);
     await page.screenshot({ path: `${OUT}/compare.png` });
+  });
+});
+
+test.describe("social", () => {
+  // 1200x630 is what Open Graph and Twitter cards are cropped to; anything
+  // else gets letterboxed or cut by the platforms.
+  test.use({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+
+  test("og", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: "public/og.png" });
   });
 });
 

@@ -88,15 +88,87 @@ export function Nav() {
   );
 }
 
+const FOOTER_LINKS = [
+  { to: "/generate", label: "Generate a card" },
+  { to: "/leaderboard", label: "Leaderboard" },
+  { to: "/compare", label: "Compare players" },
+  { to: "/pack", label: "Open a pack" },
+  { to: "/squad", label: "Build a squad" },
+  { to: "/about", label: "How it works" },
+] as const;
+
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-border/50 py-5">
-      <div className="mx-auto max-w-7xl space-y-1 px-4 text-center text-[11px] leading-5 text-muted-foreground sm:px-6">
-        <p className="font-display uppercase text-foreground/70">Codeforces Cards</p>
-        <p>
-          Unofficial fan project. Stats come from the public Codeforces API. Not affiliated with
-          Codeforces or any football-game publisher.
-        </p>
+    <footer className="mt-16 border-t border-border/50">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+        <div className="lg:col-span-2">
+          <p className="font-display text-sm font-bold uppercase tracking-widest">
+            Codeforces Cards
+          </p>
+          <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
+            Competitive-programming player cards built from real contest history. Every rating is
+            calculated from public Codeforces data — the same handle always produces the same card.
+          </p>
+        </div>
+
+        <nav aria-label="Footer" className="text-sm">
+          <p className="font-display text-xs font-semibold uppercase tracking-widest">Explore</p>
+          <ul className="mt-3 space-y-2">
+            {FOOTER_LINKS.map((l) => (
+              <li key={l.to}>
+                <Link
+                  to={l.to}
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="text-sm">
+          <p className="font-display text-xs font-semibold uppercase tracking-widest">Project</p>
+          <ul className="mt-3 space-y-2 text-muted-foreground">
+            <li>
+              <a
+                href="https://github.com/Nandansai08/cf-cards"
+                className="transition-colors hover:text-foreground"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Source on GitHub
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://codeforces.com/apiHelp"
+                className="transition-colors hover:text-foreground"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Codeforces API
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/Nandansai08/cf-cards/issues"
+                className="transition-colors hover:text-foreground"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Report an issue
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-border/50">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs text-muted-foreground sm:px-6">
+          <p>© {new Date().getFullYear()} Codeforces Cards</p>
+          <p>Independent project · Data from the public Codeforces API</p>
+        </div>
       </div>
     </footer>
   );
