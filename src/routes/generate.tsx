@@ -32,7 +32,9 @@ function GeneratePage() {
         Enter a Codeforces handle. We read only public data: rating, contests and submissions.
       </p>
       <div className="mt-8">
-        <HandleForm onSubmit={(handle) => void navigate({ to: "/player/$handle", params: { handle } })} />
+        <HandleForm
+          onSubmit={(handle) => void navigate({ to: "/player/$handle", params: { handle } })}
+        />
       </div>
       <div className="mt-14 flex justify-center opacity-40">
         <PlayerCardSkeleton width={300} />

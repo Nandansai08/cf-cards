@@ -76,8 +76,7 @@ function LeaderboardPage() {
 
   const roster = useMemo(() => readRoster(), []);
   const handles = useMemo(
-    () =>
-      [...new Set([...roster.map((r) => r.handle), ...SEED_HANDLES])].slice(0, 60),
+    () => [...new Set([...roster.map((r) => r.handle), ...SEED_HANDLES])].slice(0, 60),
     [roster],
   );
 
@@ -93,8 +92,10 @@ function LeaderboardPage() {
     const byHandle = new Map(roster.map((r) => [r.handle.toLowerCase(), r]));
     let out = data.map((i) => toRow(i, byHandle.get(i.handle.toLowerCase())));
     const needle = filter.trim().toLowerCase();
-    if (scope === "country" && needle) out = out.filter((r) => (r.country ?? "").toLowerCase().includes(needle));
-    if (scope === "org" && needle) out = out.filter((r) => (r.organization ?? "").toLowerCase().includes(needle));
+    if (scope === "country" && needle)
+      out = out.filter((r) => (r.country ?? "").toLowerCase().includes(needle));
+    if (scope === "org" && needle)
+      out = out.filter((r) => (r.organization ?? "").toLowerCase().includes(needle));
     const cat = CATEGORIES.find((c) => c.key === category)!;
     if (cat.needsCard) out = out.filter((r) => r.generated);
     const value = (r: Row) =>
@@ -117,11 +118,12 @@ function LeaderboardPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="flex items-center gap-3 font-display text-4xl font-bold uppercase tracking-tight sm:text-5xl">
-        <Trophy className="h-8 w-8 text-primary" /> Leader<span className="text-gradient-gold">board</span>
+        <Trophy className="h-8 w-8 text-primary" /> Leader
+        <span className="text-gradient-gold">board</span>
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Card metrics (OVR, potential, solved, contests) appear for players whose card has been generated on
-        this device. Ratings and ranks come live from Codeforces.
+        Card metrics (OVR, potential, solved, contests) appear for players whose card has been
+        generated on this device. Ratings and ranks come live from Codeforces.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
@@ -156,7 +158,9 @@ function LeaderboardPage() {
           <Input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder={scope === "country" ? "Filter by country, e.g. India" : "Filter by organization"}
+            placeholder={
+              scope === "country" ? "Filter by country, e.g. India" : "Filter by organization"
+            }
             className="h-10 max-w-xs bg-surface/60"
           />
         )}
@@ -170,7 +174,9 @@ function LeaderboardPage() {
             ))}
           </div>
         )}
-        {error instanceof Error && <p className="p-6 text-sm text-muted-foreground">{error.message}</p>}
+        {error instanceof Error && (
+          <p className="p-6 text-sm text-muted-foreground">{error.message}</p>
+        )}
         {!isPending && !error && rows.length === 0 && (
           <div className="p-8 text-center text-sm text-muted-foreground">
             Nothing here yet.{" "}
@@ -231,7 +237,9 @@ function LeaderboardPage() {
                     <span className="block font-display text-lg font-bold tabular-nums text-primary">
                       {r.generated ? r.ovr : "—"}
                     </span>
-                    <span className="block text-[10px] uppercase tracking-widest text-muted-foreground">OVR</span>
+                    <span className="block text-[10px] uppercase tracking-widest text-muted-foreground">
+                      OVR
+                    </span>
                   </span>
                   <span className="w-16 shrink-0 text-right font-display tabular-nums">
                     {r.rating || "—"}

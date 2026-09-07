@@ -1,0 +1,51 @@
+name: Feature request
+description: Suggest an idea for the app
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: What are you trying to do that the app makes hard or impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+      description: Describe the feature. Sketches and screenshots are very welcome.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app?
+      options:
+        - The card itself
+        - Player profile
+        - Rating model / attributes
+        - Compare
+        - Leaderboard
+        - Squad
+        - Pack
+        - Sharing and export
+        - Something else
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints this project holds to
+      description: >
+        Please confirm your idea fits these. They are not negotiable — see
+        CONTRIBUTING.md for why.
+      options:
+        - label: It can be built from the public Codeforces API alone (no login, no private data, no scraping)
+          required: true
+        - label: It doesn't require inventing or estimating data that Codeforces doesn't publish
+          required: true
+        - label: If it touches the rating model, it stays deterministic and explainable
+          required: true

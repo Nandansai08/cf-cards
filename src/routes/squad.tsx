@@ -37,7 +37,8 @@ function synergy(players: PlayerProfile[]): number {
   for (const p of players) {
     for (const k of ATTR_ORDER) best.set(k, Math.max(best.get(k) ?? 0, p.attrs[k]));
   }
-  const coverage = ATTR_ORDER.reduce((a, k) => a + (best.get(k) ?? 0), 0) / (ATTR_ORDER.length * 99);
+  const coverage =
+    ATTR_ORDER.reduce((a, k) => a + (best.get(k) ?? 0), 0) / (ATTR_ORDER.length * 99);
   const distinctRoles = new Set(players.map((p) => p.position)).size / SLOTS.length;
   const fill = players.length / SLOTS.length;
   return Math.round(100 * (0.55 * coverage + 0.25 * Math.min(1, distinctRoles) + 0.2 * fill));
@@ -69,7 +70,8 @@ function SquadPage() {
         Squad <span className="text-gradient-gold">builder</span>
       </h1>
       <p className="mt-3 text-muted-foreground">
-        Add up to five handles. Synergy rewards squads that cover all six attributes with different roles.
+        Add up to five handles. Synergy rewards squads that cover all six attributes with different
+        roles.
       </p>
 
       <div className="mt-8 max-w-xl">
@@ -79,7 +81,11 @@ function SquadPage() {
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Squad OVR" value={squadOvr || "—"} />
         <StatTile label="Avg rating" value={avgRating || "—"} />
-        <StatTile label="Synergy" value={`${synergy(players)}%`} hint="Attribute coverage + role mix" />
+        <StatTile
+          label="Synergy"
+          value={`${synergy(players)}%`}
+          hint="Attribute coverage + role mix"
+        />
         <StatTile label="Players" value={`${handles.length}/${SLOTS.length}`} />
       </div>
 
@@ -131,7 +137,9 @@ function SquadPage() {
 
       {players.length > 1 && (
         <div className="panel mt-8 p-5">
-          <h2 className="font-display text-lg font-bold uppercase tracking-wide">Squad attribute coverage</h2>
+          <h2 className="font-display text-lg font-bold uppercase tracking-wide">
+            Squad attribute coverage
+          </h2>
           <div className="mt-4 space-y-3">
             {ATTR_ORDER.map((k) => {
               const best = Math.max(...players.map((p) => p.attrs[k]));

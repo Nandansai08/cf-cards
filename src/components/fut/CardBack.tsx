@@ -18,15 +18,14 @@ function Sparkline({ points, width, height }: { points: number[]; width: number;
   const span = max - min || 1;
   const step = width / (points.length - 1);
   const d = points
-    .map((p, i) => `${i === 0 ? "M" : "L"}${(i * step).toFixed(1)},${(height - ((p - min) / span) * height).toFixed(1)}`)
+    .map(
+      (p, i) =>
+        `${i === 0 ? "M" : "L"}${(i * step).toFixed(1)},${(height - ((p - min) / span) * height).toFixed(1)}`,
+    )
     .join(" ");
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden>
-      <path
-        d={`${d} L${width},${height} L0,${height} Z`}
-        fill="currentColor"
-        opacity={0.18}
-      />
+      <path d={`${d} L${width},${height} L0,${height} Z`} fill="currentColor" opacity={0.18} />
       <path d={d} fill="none" stroke="currentColor" strokeWidth={1.6} opacity={0.95} />
     </svg>
   );
@@ -88,17 +87,18 @@ export function CardBack({ profile, style, width = 320, exportMode = false }: Pr
         <Section label="Player data" s={s} line={line}>
           <div className="grid grid-cols-2" style={{ rowGap: 1.5 * s, columnGap: 12 * s }}>
             {rows.map(([label, value]) => (
-              <div key={label} className="flex items-baseline justify-between" style={{ gap: 6 * s }}>
+              <div
+                key={label}
+                className="flex items-baseline justify-between"
+                style={{ gap: 6 * s }}
+              >
                 <span
                   className="font-display uppercase"
                   style={{ fontSize: 8.5 * s, letterSpacing: "0.12em", opacity: 0.7 }}
                 >
                   {label}
                 </span>
-                <span
-                  className="font-display font-bold tabular-nums"
-                  style={{ fontSize: 12 * s }}
-                >
+                <span className="font-display font-bold tabular-nums" style={{ fontSize: 12 * s }}>
                   {value}
                 </span>
               </div>
@@ -139,10 +139,7 @@ export function CardBack({ profile, style, width = 320, exportMode = false }: Pr
                 >
                   #{f.rank}
                 </span>
-                <span
-                  className="font-display font-bold tabular-nums"
-                  style={{ fontSize: 10 * s }}
-                >
+                <span className="font-display font-bold tabular-nums" style={{ fontSize: 10 * s }}>
                   {f.delta > 0 ? "+" : ""}
                   {f.delta}
                 </span>
@@ -263,17 +260,17 @@ export function CardBack({ profile, style, width = 320, exportMode = false }: Pr
             </div>
             <div style={{ marginTop: 8 * s, fontSize: 8.5 * s, lineHeight: 1.5, opacity: 0.92 }}>
               <p className="font-display">
-                OVR ={" "}
-                {ATTR_ORDER.map((k) => `${ATTR_WEIGHTS[k].toFixed(2)}·${k}`).join(" + ")}
+                OVR = {ATTR_ORDER.map((k) => `${ATTR_WEIGHTS[k].toFixed(2)}·${k}`).join(" + ")}
               </p>
               <p style={{ marginTop: 6 * s }}>
                 Each attribute is a deterministic function of your public Codeforces data — rating,
-                contest results, solved-problem difficulty, tag spread and activity months. Volume is
-                log-scaled so huge counts add diminishing value. Same handle, same history, same card.
+                contest results, solved-problem difficulty, tag spread and activity months. Volume
+                is log-scaled so huge counts add diminishing value. Same handle, same history, same
+                card.
               </p>
               <p style={{ marginTop: 6 * s, fontWeight: 600 }}>
-                Codeforces Cards OVR is a calculated metric based on public Codeforces data. It is not an
-                official Codeforces rating.
+                Codeforces Cards OVR is a calculated metric based on public Codeforces data. It is
+                not an official Codeforces rating.
               </p>
             </div>
           </div>

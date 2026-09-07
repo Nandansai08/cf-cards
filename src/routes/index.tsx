@@ -132,16 +132,20 @@ function Landing() {
             <BarChart3 className="h-5 w-5 text-primary" /> How is this calculated?
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Each attribute is scaled 1–99. Counts (problems, contests, tags) use a logarithmic scale, so
-            a player with 3,000 solves doesn't automatically outrank everyone — difficulty and contest
-            results still dominate. OVR is a weighted blend: 30% PAS, 22% SHO, 15% DEF, 13% DRI, 12% PHY,
-            8% PAC. Potential adds a small bonus derived from your last 12 months of rating change.
+            Each attribute is scaled 1–99. Counts (problems, contests, tags) use a logarithmic
+            scale, so a player with 3,000 solves doesn't automatically outrank everyone — difficulty
+            and contest results still dominate. OVR is a weighted blend: 30% PAS, 22% SHO, 15% DEF,
+            13% DRI, 12% PHY, 8% PAC. Potential adds a small bonus derived from your last 12 months
+            of rating change.
           </p>
         </div>
       </Section>
 
       {/* RARITIES */}
-      <Section title="Card rarities" subtitle="Your tier is set by your OVR — nothing cosmetic can fake it.">
+      <Section
+        title="Card rarities"
+        subtitle="Your tier is set by your OVR — nothing cosmetic can fake it."
+      >
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
           {(Object.keys(TIER_META) as Tier[]).map((t) => (
             <div
@@ -149,7 +153,9 @@ function Landing() {
               className={`tier tier-${t} card-shell grid aspect-[0.72] place-items-center rounded-xl p-3 text-center`}
             >
               <div>
-                <p className="font-display text-sm font-bold uppercase tracking-wider">{TIER_META[t].label}</p>
+                <p className="font-display text-sm font-bold uppercase tracking-wider">
+                  {TIER_META[t].label}
+                </p>
                 <p className="font-display text-xs opacity-80">
                   OVR {TIER_META[t].min}
                   {t === "legendary" ? "+" : "+"}
@@ -163,10 +169,26 @@ function Landing() {
       {/* FEATURE GRID */}
       <Section title="More game modes" subtitle="Everything runs on the same deterministic engine.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <FeatureLink to="/compare" title="Compare" body="Two handles, two cards, attribute-by-attribute." />
-          <FeatureLink to="/leaderboard" title="Leaderboard" body="Global, country and college rankings." />
-          <FeatureLink to="/squad" title="Squad builder" body="Build a five-player lineup with a synergy score." />
-          <FeatureLink to="/pack" title="Pack opening" body="Reveal any handle with a full pack animation." />
+          <FeatureLink
+            to="/compare"
+            title="Compare"
+            body="Two handles, two cards, attribute-by-attribute."
+          />
+          <FeatureLink
+            to="/leaderboard"
+            title="Leaderboard"
+            body="Global, country and college rankings."
+          />
+          <FeatureLink
+            to="/squad"
+            title="Squad builder"
+            body="Build a five-player lineup with a synergy score."
+          />
+          <FeatureLink
+            to="/pack"
+            title="Pack opening"
+            body="Reveal any handle with a full pack animation."
+          />
         </div>
       </Section>
 
@@ -198,7 +220,9 @@ function Section({
   return (
     <section className="px-4 py-14 sm:px-6">
       <div className="mx-auto max-w-7xl">
-        <h2 className="font-display text-2xl font-bold uppercase tracking-tight sm:text-3xl">{title}</h2>
+        <h2 className="font-display text-2xl font-bold uppercase tracking-tight sm:text-3xl">
+          {title}
+        </h2>
         {subtitle && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
         <div className="mt-8">{children}</div>
       </div>
@@ -206,7 +230,15 @@ function Section({
   );
 }
 
-function FeatureLink({ to, title, body }: { to: "/compare" | "/leaderboard" | "/squad" | "/pack"; title: string; body: string }) {
+function FeatureLink({
+  to,
+  title,
+  body,
+}: {
+  to: "/compare" | "/leaderboard" | "/squad" | "/pack";
+  title: string;
+  body: string;
+}) {
   return (
     <Link to={to} className="panel group p-5 transition-colors hover:border-primary/60">
       <p className="flex items-center justify-between font-display text-lg font-bold uppercase tracking-wide">

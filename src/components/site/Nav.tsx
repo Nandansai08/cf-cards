@@ -50,7 +50,11 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild size="sm" className="hidden font-display uppercase tracking-wider sm:inline-flex">
+          <Button
+            asChild
+            size="sm"
+            className="hidden font-display uppercase tracking-wider sm:inline-flex"
+          >
             <Link to="/generate">
               <Sparkles className="mr-1 h-4 w-4" /> Generate Card
             </Link>

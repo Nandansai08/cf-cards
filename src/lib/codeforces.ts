@@ -170,7 +170,9 @@ export async function fetchPlayerData(rawHandle: string): Promise<CFPlayerData> 
   if (cached) return cached;
 
   const info = (
-    await call<CFUserInfo[]>(`user.info?handles=${encodeURIComponent(handle)}&checkHistoricHandles=false`)
+    await call<CFUserInfo[]>(
+      `user.info?handles=${encodeURIComponent(handle)}&checkHistoricHandles=false`,
+    )
   )[0];
   if (!info) {
     throw new CFError(
@@ -194,31 +196,6 @@ export async function fetchPlayerData(rawHandle: string): Promise<CFPlayerData> 
   };
   writeCache(info.handle, data);
   return data;
-}
-
-export const RANK_ORDER = [
-  "newbie",
-  "pupil",
-  "specialist",
-  "expert",
-  "candidate master",
-  "master",
-  "international master",
-  "grandmaster",
-  "international grandmaster",
-  "legendary grandmaster",
-];
-
-export function rankColorToken(rank?: string): string {
-  const r = (rank ?? "").toLowerCase();
-  if (r.includes("legendary")) return "text-destructive";
-  if (r.includes("grandmaster")) return "text-destructive";
-  if (r.includes("international master") || r.includes("master")) return "text-primary";
-  if (r.includes("candidate")) return "text-magenta";
-  if (r.includes("expert")) return "text-accent";
-  if (r.includes("specialist")) return "text-cyan";
-  if (r.includes("pupil")) return "text-lime";
-  return "text-muted-foreground";
 }
 
 export function avatarUrl(info: CFUserInfo): string {

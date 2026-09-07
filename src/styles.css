@@ -103,7 +103,8 @@
   --sidebar-border: oklch(0.34 0.035 264);
   --sidebar-ring: oklch(0.83 0.15 88);
 
-  --gradient-hero: radial-gradient(
+  --gradient-hero:
+    radial-gradient(
       120% 90% at 15% 0%,
       color-mix(in oklab, var(--accent) 22%, transparent),
       transparent 60%
@@ -113,7 +114,12 @@
       color-mix(in oklab, var(--gold) 18%, transparent),
       transparent 55%
     );
-  --gradient-gold: linear-gradient(150deg, oklch(0.92 0.11 95), oklch(0.74 0.16 74) 55%, oklch(0.55 0.12 62));
+  --gradient-gold: linear-gradient(
+    150deg,
+    oklch(0.92 0.11 95),
+    oklch(0.74 0.16 74) 55%,
+    oklch(0.55 0.12 62)
+  );
   --shadow-glow: 0 0 60px -12px color-mix(in oklab, var(--gold) 55%, transparent);
   --shadow-elevated: 0 24px 60px -24px oklch(0 0 0 / 0.75);
 }
@@ -222,8 +228,7 @@
 }
 
 .card-shell {
-  background:
-    linear-gradient(160deg, var(--tier-a) 0%, var(--tier-b) 62%, var(--tier-a) 100%);
+  background: linear-gradient(160deg, var(--tier-a) 0%, var(--tier-b) 62%, var(--tier-a) 100%);
   color: var(--tier-ink);
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--tier-a) 70%, transparent),

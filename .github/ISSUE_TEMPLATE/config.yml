@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Nandansai08/cf-cards/security/advisories/new
+    about: Please report security problems privately, never as a public issue.
+  - name: How the ratings are calculated
+    url: https://github.com/Nandansai08/cf-cards/blob/main/README.md#the-rating-model
+    about: Read this before opening an issue about a card score looking wrong.

@@ -73,10 +73,10 @@ export function saveToRoster(profile: PlayerProfile): RosterEntry[] {
     position: profile.position,
     savedAt: Date.now(),
   };
-  const next = [entry, ...readRoster().filter((r) => r.handle.toLowerCase() !== entry.handle.toLowerCase())].slice(
-    0,
-    200,
-  );
+  const next = [
+    entry,
+    ...readRoster().filter((r) => r.handle.toLowerCase() !== entry.handle.toLowerCase()),
+  ].slice(0, 200);
   try {
     window.localStorage.setItem(KEY, JSON.stringify(next));
   } catch {

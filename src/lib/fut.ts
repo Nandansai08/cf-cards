@@ -52,14 +52,7 @@ export const ATTR_WEIGHTS: Record<AttrKey, number> = {
 
 export type Attributes = Record<AttrKey, number>;
 
-export type Tier =
-  | "bronze"
-  | "silver"
-  | "gold"
-  | "rare-gold"
-  | "epic"
-  | "icon"
-  | "legendary";
+export type Tier = "bronze" | "silver" | "gold" | "rare-gold" | "epic" | "icon" | "legendary";
 
 export const TIER_META: Record<Tier, { label: string; min: number }> = {
   bronze: { label: "Bronze", min: 0 },
@@ -72,12 +65,7 @@ export const TIER_META: Record<Tier, { label: string; min: number }> = {
 };
 
 export type Position =
-  | "CP"
-  | "GRINDER"
-  | "SPECIALIST"
-  | "CONTENDER"
-  | "RISING STAR"
-  | "PROBLEM SOLVER";
+  "CP" | "GRINDER" | "SPECIALIST" | "CONTENDER" | "RISING STAR" | "PROBLEM SOLVER";
 
 export interface Stats {
   currentRating: number;
@@ -189,8 +177,6 @@ export function ratingScore(rating: number): number {
   return 99;
 }
 
-const MONTH = 1000 * 60 * 60 * 24 * 30;
-
 /* ---------------- core computation ---------------- */
 
 interface Core {
@@ -226,7 +212,9 @@ function computeCore(data: CFPlayerData, cutoffSec: number): Core {
   const buckets = new Set(rated.map((r) => Math.floor(r / 200)));
   const top10 = rated.slice(0, 10);
   const top10Avg = top10.length ? top10.reduce((a, b) => a + b, 0) / top10.length : 0;
-  const avgSolvedRating = rated.length ? Math.round(rated.reduce((a, b) => a + b, 0) / rated.length) : 0;
+  const avgSolvedRating = rated.length
+    ? Math.round(rated.reduce((a, b) => a + b, 0) / rated.length)
+    : 0;
   const solved1900 = rated.filter((r) => r >= 1900).length;
   const solved2200 = rated.filter((r) => r >= 2200).length;
 
@@ -282,7 +270,9 @@ function computeCore(data: CFPlayerData, cutoffSec: number): Core {
   const SHO = clamp(0.85 * ratingScore(stats.top10Avg) + 16 * logNorm(solved1900, 120));
 
   const PAS = history.length
-    ? clamp(0.72 * ratingScore(currentRating) + 30 * positiveShare + 4 * logNorm(history.length, 60))
+    ? clamp(
+        0.72 * ratingScore(currentRating) + 30 * positiveShare + 4 * logNorm(history.length, 60),
+      )
     : clamp(0.5 * ratingScore(stats.top10Avg));
 
   const DRI = clamp(
@@ -334,19 +324,50 @@ export function tierFor(ovr: number): Tier {
 
 function buildBadges(attrs: Attributes, s: Stats): Badge[] {
   const out: Badge[] = [];
-  if (attrs.SHO >= 78) out.push({ icon: "🧠", label: "PROBLEM SOLVER", reason: `Top-10 solved average ${s.top10Avg}` });
-  if (attrs.PAC >= 72) out.push({ icon: "⚡", label: "SPEED DEMON", reason: `${s.gain12m >= 0 ? "+" : ""}${s.gain12m} rating in 12 months` });
-  if (s.contests >= 40) out.push({ icon: "🔥", label: "CONTEST GRINDER", reason: `${s.contests} rated contests` });
-  if (s.solved2200 >= 15) out.push({ icon: "💀", label: "HARD PROBLEM HUNTER", reason: `${s.solved2200} problems rated 2200+` });
+  if (attrs.SHO >= 78)
+    out.push({
+      icon: "🧠",
+      label: "PROBLEM SOLVER",
+      reason: `Top-10 solved average ${s.top10Avg}`,
+    });
+  if (attrs.PAC >= 72)
+    out.push({
+      icon: "⚡",
+      label: "SPEED DEMON",
+      reason: `${s.gain12m >= 0 ? "+" : ""}${s.gain12m} rating in 12 months`,
+    });
+  if (s.contests >= 40)
+    out.push({ icon: "🔥", label: "CONTEST GRINDER", reason: `${s.contests} rated contests` });
+  if (s.solved2200 >= 15)
+    out.push({
+      icon: "💀",
+      label: "HARD PROBLEM HUNTER",
+      reason: `${s.solved2200} problems rated 2200+`,
+    });
   if (attrs.PAC >= 68 && s.contests <= 40 && s.gain12m > 150)
     out.push({ icon: "📈", label: "RISING STAR", reason: "Fast climb over a short career" });
-  if (attrs.PAS >= 82) out.push({ icon: "🏆", label: "CONTEST BEAST", reason: `Rating ${s.currentRating} with ${Math.round(s.positiveShare * 100)}% non-negative contests` });
+  if (attrs.PAS >= 82)
+    out.push({
+      icon: "🏆",
+      label: "CONTEST BEAST",
+      reason: `Rating ${s.currentRating} with ${Math.round(s.positiveShare * 100)}% non-negative contests`,
+    });
   if (s.topTags[0] && s.solved > 40 && s.topTags[0].count / Math.max(1, s.solved) > 0.42)
-    out.push({ icon: "🎯", label: "SPECIALIST", reason: `${s.topTags[0].count} solves tagged "${s.topTags[0].tag}"` });
-  if (attrs.DRI >= 78) out.push({ icon: "🛠", label: "VERSATILE", reason: `${s.distinctTags} distinct tags solved` });
-  if (s.solved >= 700) out.push({ icon: "📚", label: "VOLUME KING", reason: `${s.solved} problems solved` });
+    out.push({
+      icon: "🎯",
+      label: "SPECIALIST",
+      reason: `${s.topTags[0].count} solves tagged "${s.topTags[0].tag}"`,
+    });
+  if (attrs.DRI >= 78)
+    out.push({ icon: "🛠", label: "VERSATILE", reason: `${s.distinctTags} distinct tags solved` });
+  if (s.solved >= 700)
+    out.push({ icon: "📚", label: "VOLUME KING", reason: `${s.solved} problems solved` });
   if (out.length === 0)
-    out.push({ icon: "🌱", label: "ROOKIE", reason: "Early contest record — more rated results are needed" });
+    out.push({
+      icon: "🌱",
+      label: "ROOKIE",
+      reason: "Early contest record — more rated results are needed",
+    });
   return out.slice(0, 5);
 }
 
@@ -440,11 +461,21 @@ function buildAnalysis(attrs: Attributes, s: Stats) {
       bad: "Low contest volume keeps your endurance score down.",
     },
   };
-  const strengths = entries.slice(0, 3).filter((e) => e.v >= 45).map((e) => phrase[e.k].good);
-  const weaknesses = entries.slice(-3).reverse().filter((e) => e.v < 78).map((e) => phrase[e.k].bad);
-  if (strengths.length === 0) strengths.push("You're just getting started — every contest from here adds signal.");
-  if (weaknesses.length === 0) weaknesses.push("No obvious weak spot — your attributes are impressively balanced.");
-  if (s.topTags[0]) strengths.push(`Strongest tag: ${s.topTags[0].tag} (${s.topTags[0].count} solves).`);
+  const strengths = entries
+    .slice(0, 3)
+    .filter((e) => e.v >= 45)
+    .map((e) => phrase[e.k].good);
+  const weaknesses = entries
+    .slice(-3)
+    .reverse()
+    .filter((e) => e.v < 78)
+    .map((e) => phrase[e.k].bad);
+  if (strengths.length === 0)
+    strengths.push("You're just getting started — every contest from here adds signal.");
+  if (weaknesses.length === 0)
+    weaknesses.push("No obvious weak spot — your attributes are impressively balanced.");
+  if (s.topTags[0])
+    strengths.push(`Strongest tag: ${s.topTags[0].tag} (${s.topTags[0].count} solves).`);
   return { strengths: strengths.slice(0, 4), weaknesses: weaknesses.slice(0, 3) };
 }
 
@@ -472,8 +503,10 @@ export function buildProfile(data: CFPlayerData): PlayerProfile {
   const potential = clamp(Math.max(ovr, ovr + potentialBonus));
 
   const years = new Set<number>();
-  for (const h of data.ratingHistory) years.add(new Date(h.ratingUpdateTimeSeconds * 1000).getUTCFullYear());
-  for (const s of data.submissions) years.add(new Date(s.creationTimeSeconds * 1000).getUTCFullYear());
+  for (const h of data.ratingHistory)
+    years.add(new Date(h.ratingUpdateTimeSeconds * 1000).getUTCFullYear());
+  for (const s of data.submissions)
+    years.add(new Date(s.creationTimeSeconds * 1000).getUTCFullYear());
   const evolution: EvolutionPoint[] = [...years]
     .sort((a, b) => a - b)
     .map((year) => {

@@ -57,7 +57,9 @@ function PlayerPage() {
     return (
       <div className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
         <AlertTriangle className="mx-auto h-10 w-10 text-primary" />
-        <h1 className="mt-4 font-display text-2xl font-bold uppercase tracking-wide">No card yet</h1>
+        <h1 className="mt-4 font-display text-2xl font-bold uppercase tracking-wide">
+          No card yet
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {error instanceof Error
             ? error.message

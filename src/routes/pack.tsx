@@ -123,7 +123,9 @@ function PackPage() {
 
         {(phase === "rarity" || phase === "ovr") && data && (
           <div className="animate-rise space-y-4">
-            <p className="font-display text-xs uppercase tracking-[0.4em] text-muted-foreground">Rarity</p>
+            <p className="font-display text-xs uppercase tracking-[0.4em] text-muted-foreground">
+              Rarity
+            </p>
             <p className="text-gradient-gold font-display text-5xl font-bold uppercase sm:text-6xl">
               {tierLabel}
             </p>

@@ -1,0 +1,83 @@
+name: Bug report
+description: Something in the app is broken or wrong
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The most useful thing you can give us is the
+        Codeforces handle that reproduces the problem — most bugs here only
+        show up for a particular shape of data.
+
+  - type: input
+    id: handle
+    attributes:
+      label: Codeforces handle that reproduces it
+      description: Leave blank if the bug isn't tied to a specific handle.
+      placeholder: tourist
+    validations:
+      required: false
+
+  - type: dropdown
+    id: page
+    attributes:
+      label: Where does it happen?
+      options:
+        - Home
+        - Generate
+        - Player profile
+        - Compare
+        - Leaderboard
+        - Squad
+        - Pack
+        - About
+        - PNG export / share
+        - Somewhere else
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to /player/tourist
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: Anything red in the browser devtools console. Paste it as-is.
+      render: text
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      placeholder: Chrome 141 on Android / Safari on iPhone 15 / Firefox on Windows
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this isn't a duplicate
+          required: true
+        - label: This is not a security vulnerability (those go through SECURITY.md)
+          required: true

@@ -24,11 +24,10 @@ interface Props {
 }
 
 const PATTERNS: Record<NonNullable<CardStyleOptions["pattern"]>, string> = {
-  rays:
-    "repeating-conic-gradient(from 0deg at 50% 18%, color-mix(in oklab, white 12%, transparent) 0deg 6deg, transparent 6deg 14deg)",
-  grid:
-    "linear-gradient(color-mix(in oklab, white 10%, transparent) 1px, transparent 1px) 0 0/22px 22px, linear-gradient(90deg, color-mix(in oklab, white 10%, transparent) 1px, transparent 1px) 0 0/22px 22px",
-  plain: "radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, white 16%, transparent), transparent 70%)",
+  rays: "repeating-conic-gradient(from 0deg at 50% 18%, color-mix(in oklab, white 12%, transparent) 0deg 6deg, transparent 6deg 14deg)",
+  grid: "linear-gradient(color-mix(in oklab, white 10%, transparent) 1px, transparent 1px) 0 0/22px 22px, linear-gradient(90deg, color-mix(in oklab, white 10%, transparent) 1px, transparent 1px) 0 0/22px 22px",
+  plain:
+    "radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, white 16%, transparent), transparent 70%)",
 };
 
 /** Radius used by every face of the card so front/back match exactly. */
@@ -120,7 +119,8 @@ export function PlayerCard({
     let objectUrl: string | null = null;
     void fetch(avatar, { signal: controller.signal })
       .then((response) => {
-        if (!response.ok || !response.headers.get("content-type")?.startsWith("image/")) return null;
+        if (!response.ok || !response.headers.get("content-type")?.startsWith("image/"))
+          return null;
         return response.blob();
       })
       .then((blob) => {
@@ -155,8 +155,6 @@ export function PlayerCard({
         reveal={reveal}
         hover={!exportMode && !noHover}
       >
-
-
         {/* header: OVR + position + avatar */}
         <div className="relative flex items-start justify-between" style={{ gap: 8 * s }}>
           <div className="flex flex-col items-center" style={{ minWidth: 74 * s }}>
@@ -199,19 +197,17 @@ export function PlayerCard({
             }}
           >
             {avatarSrc ? (
-              <img
-                src={avatarSrc}
-                alt=""
-                loading="eager"
-                className="h-full w-full object-cover"
-              />
+              <img src={avatarSrc} alt="" loading="eager" className="h-full w-full object-cover" />
             ) : (
               <div
                 aria-label={`${profile.handle} initials`}
                 className="flex h-full w-full items-center justify-center border border-current/20 font-display font-bold"
                 style={{ fontSize: 44 * s }}
               >
-                {profile.handle.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "CF"}
+                {profile.handle
+                  .replace(/[^A-Za-z0-9]/g, "")
+                  .slice(0, 2)
+                  .toUpperCase() || "CF"}
               </div>
             )}
           </div>

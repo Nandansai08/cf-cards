@@ -72,7 +72,9 @@ function ComparePage() {
       {qa.data && qb.data && (
         <>
           <div className="panel mt-10 p-5">
-            <h2 className="font-display text-lg font-bold uppercase tracking-wide">Attribute comparison</h2>
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide">
+              Attribute comparison
+            </h2>
             <div className="mt-5 space-y-4">
               {ATTR_ORDER.map((k) => {
                 const av = qa.data.attrs[k];
@@ -81,17 +83,35 @@ function ComparePage() {
                 return (
                   <div key={k}>
                     <div className="mb-1 flex items-center justify-between font-display text-sm">
-                      <span className={cn("tabular-nums", av >= bv ? "text-primary" : "text-muted-foreground")}>
+                      <span
+                        className={cn(
+                          "tabular-nums",
+                          av >= bv ? "text-primary" : "text-muted-foreground",
+                        )}
+                      >
                         {av}
                       </span>
-                      <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{k}</span>
-                      <span className={cn("tabular-nums", bv >= av ? "text-accent" : "text-muted-foreground")}>
+                      <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        {k}
+                      </span>
+                      <span
+                        className={cn(
+                          "tabular-nums",
+                          bv >= av ? "text-accent" : "text-muted-foreground",
+                        )}
+                      >
                         {bv}
                       </span>
                     </div>
                     <div className="flex h-2 overflow-hidden rounded-full bg-secondary">
-                      <div className="h-full bg-primary" style={{ width: `${(av / total) * 100}%` }} />
-                      <div className="h-full bg-accent" style={{ width: `${(bv / total) * 100}%` }} />
+                      <div
+                        className="h-full bg-primary"
+                        style={{ width: `${(av / total) * 100}%` }}
+                      />
+                      <div
+                        className="h-full bg-accent"
+                        style={{ width: `${(bv / total) * 100}%` }}
+                      />
                     </div>
                   </div>
                 );
@@ -100,7 +120,9 @@ function ComparePage() {
           </div>
 
           <div className="panel mt-6 p-5">
-            <h2 className="font-display text-lg font-bold uppercase tracking-wide">Neutral summary</h2>
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide">
+              Neutral summary
+            </h2>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {compareSummary(qa.data, qb.data).map((l) => (
                 <li key={l}>• {l}</li>
@@ -139,10 +161,20 @@ function ComparePage() {
                 ].map(([label, av, bv]) => (
                   <tr key={String(label)}>
                     <td className="py-2 text-muted-foreground">{label}</td>
-                    <td className={cn("py-2 text-right font-display tabular-nums", Number(av) >= Number(bv) && "text-primary")}>
+                    <td
+                      className={cn(
+                        "py-2 text-right font-display tabular-nums",
+                        Number(av) >= Number(bv) && "text-primary",
+                      )}
+                    >
                       {av}
                     </td>
-                    <td className={cn("py-2 text-right font-display tabular-nums", Number(bv) >= Number(av) && "text-accent")}>
+                    <td
+                      className={cn(
+                        "py-2 text-right font-display tabular-nums",
+                        Number(bv) >= Number(av) && "text-accent",
+                      )}
+                    >
                       {bv}
                     </td>
                   </tr>

@@ -1,5 +1,9 @@
 # Codeforces Cards
 
+[![CI](https://github.com/Nandansai08/cf-cards/actions/workflows/ci.yml/badge.svg)](https://github.com/Nandansai08/cf-cards/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-e9b91d.svg)](LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-46d67f.svg)](CONTRIBUTING.md)
+
 Turn any Codeforces handle into a collectible, Ultimate-Team-style player card:
 an overall rating (OVR), six attributes, a rarity tier, playstyle badges,
 achievements and full rating history — all computed from public Codeforces data.
@@ -10,15 +14,15 @@ card. The full methodology is documented in-app on `/about`.
 
 ## Features
 
-| Route | What it does |
-| --- | --- |
-| `/` | Landing page — handle search, example cards, rating methodology, rarity tiers |
-| `/generate` | Enter a handle and generate a card |
-| `/player/$handle` | Full public profile: card, key stats, attributes, rating chart, form, analysis, achievements, evolution |
-| `/compare` | Two handles side by side, attribute-by-attribute, with a neutral summary |
-| `/leaderboard` | Ranked tables by OVR, rating, solved, potential, fastest rising, most contests — global, country or organization |
-| `/squad` | Build a five-player lineup with a squad OVR and synergy score |
-| `/pack` | Pack-opening reveal: rarity to OVR to card |
+| Route             | What it does                                                                                                     |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `/`               | Landing page — handle search, example cards, rating methodology, rarity tiers                                    |
+| `/generate`       | Enter a handle and generate a card                                                                               |
+| `/player/$handle` | Full public profile: card, key stats, attributes, rating chart, form, analysis, achievements, evolution          |
+| `/compare`        | Two handles side by side, attribute-by-attribute, with a neutral summary                                         |
+| `/leaderboard`    | Ranked tables by OVR, rating, solved, potential, fastest rising, most contests — global, country or organization |
+| `/squad`          | Build a five-player lineup with a squad OVR and synergy score                                                    |
+| `/pack`           | Pack-opening reveal: rarity to OVR to card                                                                       |
 
 Cards can be flipped, restyled (frame, background, tier theme — visuals only,
 never the stats) and exported as PNG in front / back / both / story formats.
@@ -27,14 +31,14 @@ never the stats) and exported as PNG in front / back / both / story formats.
 
 Six attributes, each scaled 1-99 and derived from public data:
 
-| Attribute | Meaning | Weight in OVR |
-| --- | --- | --- |
-| `PAS` | Contest performance and consistency | 30% |
-| `SHO` | High-rated problem solving | 22% |
-| `DEF` | Difficult-problem performance | 15% |
-| `DRI` | Versatility across tags and difficulty | 13% |
-| `PHY` | Endurance and consistency over time | 12% |
-| `PAC` | Improvement speed / rating growth | 8% |
+| Attribute | Meaning                                | Weight in OVR |
+| --------- | -------------------------------------- | ------------- |
+| `PAS`     | Contest performance and consistency    | 30%           |
+| `SHO`     | High-rated problem solving             | 22%           |
+| `DEF`     | Difficult-problem performance          | 15%           |
+| `DRI`     | Versatility across tags and difficulty | 13%           |
+| `PHY`     | Endurance and consistency over time    | 12%           |
+| `PAC`     | Improvement speed / rating growth      | 8%            |
 
 Volume-based inputs (problems solved, contests played, tags, active months) are
 log-scaled so that huge problem counts add diminishing value instead of
@@ -79,6 +83,29 @@ Routes live in `src/routes/` (file-based — `routeTree.gen.ts` is generated, do
 not edit it by hand). The rating engine is `src/lib/fut.ts`, the Codeforces
 client is `src/lib/codeforces.ts`, and the card components are in
 `src/components/fut/`.
+
+Before pushing, run the same three checks CI runs:
+
+```sh
+npm run lint
+npx tsc --noEmit
+npm run build
+```
+
+## Contributing
+
+Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) — it
+covers the project layout, the conventions that matter (design tokens, and the
+determinism rule for the rating engine) and what a good pull request looks like.
+
+By taking part you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+Found a security problem? Please report it privately — see
+[SECURITY.md](SECURITY.md).
+
+## License
+
+[MIT](LICENSE) © Codeforces Cards contributors
 
 ## Notes
 
