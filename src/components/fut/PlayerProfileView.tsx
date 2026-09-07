@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AvatarNote, PlayerCard, type CardStyleOptions } from "./PlayerCard";
+import { PlayerCard, type CardStyleOptions } from "./PlayerCard";
 import { CardBack } from "./CardBack";
 import { FlipCard } from "./FlipCard";
 import { RatingChart } from "./RatingChart";
@@ -470,7 +470,6 @@ export function PlayerProfileView({ profile }: { profile: PlayerProfile }) {
       <div className="grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-14 lg:items-start">
         <div className="flex flex-col items-center lg:sticky lg:top-24">
           <FlipCard profile={profile} style={style} width={320} reveal />
-          <AvatarNote profile={profile} />
           <Identity profile={profile} className="mt-7 w-full lg:hidden" />
           <div className="mt-6 w-full max-w-sm lg:mt-8">
             <OvrSummary profile={profile} />

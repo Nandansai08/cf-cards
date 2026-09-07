@@ -358,35 +358,3 @@ export function PlayerCardSkeleton({ width = 320 }: { width?: number }) {
     />
   );
 }
-
-/**
- * Says, in words, why a card is showing initials.
- *
- * It walks the same candidates as the card rather than reading the card's
- * state: on the profile page the card sits inside a 3D flip container that has
- * no room for a caption, and the hidden probe below is a cache hit for any
- * picture the card has already loaded. Worth the few lines — on a phone there
- * is no console, so without this "why are my initials showing?" cannot be
- * answered at all.
- */
-export function AvatarNote({ profile }: { profile: PlayerProfile }) {
-  const candidates = avatarCandidates(profile.data.info);
-  const { src, onError, exhausted } = useAvatarSrc(candidates);
-
-  if (candidates.length === 0) {
-    return (
-      <p className="text-center text-xs text-muted-foreground">
-        Codeforces isn't publishing a picture for this handle, so the card shows initials.
-      </p>
-    );
-  }
-  if (exhausted) {
-    return (
-      <p className="text-center text-xs text-muted-foreground">
-        This browser wouldn't load the Codeforces picture ({candidates.length} sources tried), so
-        the card shows initials.
-      </p>
-    );
-  }
-  return <img src={src} alt="" hidden aria-hidden onError={onError} referrerPolicy="no-referrer" />;
-}

@@ -92,17 +92,15 @@ test("falls back to initials only once every source has failed", async ({ page }
   await page.goto("/player/demo_solver");
 
   await expect(page.getByLabel("demo_solver initials").first()).toBeVisible();
-  // Initials with no explanation are indistinguishable from a bug. On a phone
-  // there is no console, so the page has to say which half failed.
-  await expect(page.getByText(/wouldn't load the codeforces picture/i)).toBeVisible();
 });
 
-test("distinguishes an account with no picture from one that won't load", async ({ page }) => {
-  // Both fields are Codeforces' "nothing uploaded" stand-ins.
+test("shows initials when Codeforces publishes no picture at all", async ({ page }) => {
+  // Both fields are Codeforces' "nothing uploaded" stand-ins, so there is
+  // nothing to request and the card must not sit on a broken image.
   await withPictures(page, { titlePhoto: NO_TITLE, avatar: NO_AVATAR });
 
   await page.goto("/player/demo_solver");
 
-  await expect(page.getByText(/isn't publishing a picture for this handle/i)).toBeVisible();
-  await expect(page.getByText(/wouldn't load/i)).toHaveCount(0);
+  await expect(page.getByLabel("demo_solver initials").first()).toBeVisible();
+  await expect(page.locator('img[src*="userpic"], img[src*="wsrv"]')).toHaveCount(0);
 });

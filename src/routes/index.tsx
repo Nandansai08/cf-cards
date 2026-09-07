@@ -28,11 +28,41 @@ export const Route = createFileRoute("/")({
 
 const SHOWCASE = ["tourist", "SecondThread", "Geothermal"];
 
+/**
+ * Shown when the example cards can't be built.
+ *
+ * The page used to fall back to a loading skeleton here, so a failed request
+ * left a grey rectangle that never resolved and never explained itself.
+ */
+function ShowcaseUnavailable({ width, onRetry }: { width?: number; onRetry: () => void }) {
+  return (
+    <div
+      className="panel flex flex-col items-center justify-center gap-3 p-6 text-center"
+      style={width ? { width, aspectRatio: "0.72" } : undefined}
+    >
+      <p className="text-sm text-muted-foreground">
+        Codeforces didn't answer, so the example cards couldn't be built. Your own card will still
+        work.
+      </p>
+      <Button variant="secondary" onClick={onRetry} className="font-display uppercase">
+        Try again
+      </Button>
+    </div>
+  );
+}
+
 function Landing() {
   const navigate = useNavigate();
   const go = (handle: string) => void navigate({ to: "/player/$handle", params: { handle } });
 
   const cards = useQueries({ queries: SHOWCASE.map((h) => playerQueryOptions(h)) });
+
+  // The hero shows the first card that loads, not specifically the first
+  // handle: if Codeforces is slow or rate-limiting one profile, showing a
+  // different real card beats showing an empty rectangle.
+  const hero = cards.find((q) => q.data)?.data;
+  const loadingShowcase = cards.some((q) => q.isPending || q.isFetching);
+  const retryShowcase = () => cards.forEach((q) => void q.refetch());
 
   return (
     <div>
@@ -81,12 +111,14 @@ function Landing() {
               className="absolute inset-0 -z-10 rounded-full blur-3xl"
               style={{ background: "var(--gradient-gold)", opacity: 0.14 }}
             />
-            {cards[0]?.data ? (
+            {hero ? (
               <div>
-                <PlayerCard profile={cards[0].data} width={320} reveal />
+                <PlayerCard profile={hero} width={320} reveal />
               </div>
-            ) : (
+            ) : loadingShowcase ? (
               <PlayerCardSkeleton width={320} />
+            ) : (
+              <ShowcaseUnavailable width={320} onRetry={retryShowcase} />
             )}
           </div>
         </div>
@@ -108,11 +140,18 @@ function Landing() {
               >
                 <PlayerCard profile={q.data} width={260} />
               </Link>
-            ) : (
+            ) : q.isPending || q.isFetching ? (
               <PlayerCardSkeleton key={SHOWCASE[i]} width={260} />
-            ),
+            ) : // A card that failed is dropped rather than left as a permanent
+            // grey rectangle; the message below covers the all-failed case.
+            null,
           )}
         </div>
+        {!hero && !loadingShowcase && (
+          <div className="mt-4 text-center">
+            <ShowcaseUnavailable onRetry={retryShowcase} />
+          </div>
+        )}
       </Section>
 
       {/* HOW RATING WORKS */}
