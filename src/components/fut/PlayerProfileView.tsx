@@ -26,6 +26,7 @@ import {
   type Tier,
 } from "@/lib/fut";
 import { cn } from "@/lib/utils";
+import { saveBlob } from "@/lib/download";
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return <h2 className="font-display text-lg font-bold uppercase text-foreground">{children}</h2>;
@@ -253,18 +254,27 @@ export function CardActions({
             ? "[data-export-both]"
             : "[data-export-story]";
     const node = exportRef.current?.querySelector<HTMLElement>(selector);
-    if (!node) return;
+    if (!node) {
+      toast.error("That layout isn't ready yet — try again in a moment.");
+      return;
+    }
     setBusy(true);
     try {
-      const { toPng } = await import("html-to-image");
-      const url = await toPng(node, { pixelRatio: 2, cacheBust: true, skipFonts: false });
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `codeforces-cards-${profile.handle}-${format}.png`;
-      anchor.click();
-      toast.success("Card downloaded");
-    } catch {
-      toast.error("Couldn't render the image. Try again.");
+      const { toBlob } = await import("html-to-image");
+      const blob = await toBlob(node, { pixelRatio: 2, cacheBust: true });
+      if (!blob) throw new Error("the card rendered empty");
+      const name = `codeforces-cards-${profile.handle}-${format}.png`;
+      const result = await saveBlob(blob, name);
+      if (result === "downloaded") toast.success("Card downloaded");
+      if (result === "shared") toast.success("Card shared");
+      if (result === "opened")
+        toast.success("Card opened in a new tab — press and hold to save it");
+    } catch (error) {
+      // The old catch reported "try again" for every cause, which made a
+      // failure impossible to act on or report. Say what actually went wrong.
+      console.error("Card export failed", error);
+      const reason = error instanceof Error ? error.message : "unknown error";
+      toast.error(`Couldn't save the card: ${reason}`);
     } finally {
       setBusy(false);
     }
