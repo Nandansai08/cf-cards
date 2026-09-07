@@ -13,11 +13,17 @@ import { useEffect, useState } from "react";
 export function useAvatarSrc(candidates: string[]): {
   src: string | undefined;
   onError: () => void;
+  /** True once every candidate has failed to load. */
+  exhausted: boolean;
 } {
   // Compare by value, not array identity: callers rebuild the list each render.
   const key = candidates.join("\n");
   const [attempt, setAttempt] = useState(0);
   useEffect(() => setAttempt(0), [key]);
 
-  return { src: candidates[attempt], onError: () => setAttempt((n) => n + 1) };
+  return {
+    src: candidates[attempt],
+    onError: () => setAttempt((n) => n + 1),
+    exhausted: candidates.length > 0 && attempt >= candidates.length,
+  };
 }
