@@ -200,32 +200,78 @@ export async function fetchPlayerData(rawHandle: string): Promise<CFPlayerData> 
 
 const AVATAR_DOMAINS = ["codeforces.com", "codeforces.org"];
 
+// Codeforces serves these stand-ins for accounts that never uploaded a
+// picture. They are perfectly loadable images, so without this check a card
+// would either show a grey silhouette or, if the stand-in itself fails to
+// load, give up before trying the account's other upload.
+const AVATAR_PLACEHOLDER = /\/no-(title|avatar)\.[a-z]+$/i;
+
 /**
- * Absolute https URL for a user's picture, or "" if there isn't a usable one.
- * Loaded straight from Codeforces as a plain <img>, so the app stays fully
- * static. Restricted to Codeforces domains so a hostile API response can't
- * point the card at an arbitrary origin.
+ * One Codeforces picture URL, normalised to absolute https, or "" if unusable.
+ * Restricted to Codeforces domains so a hostile API response can't point the
+ * card at an arbitrary origin.
  */
-export function avatarUrl(info: CFUserInfo): string {
-  // `||`, not `??`: Codeforces returns an empty string for some accounts, and
-  // an empty titlePhoto should fall through to the smaller avatar rather than
-  // give up on a picture entirely.
-  const raw = (info.titlePhoto || info.avatar || "").trim();
-  if (!raw) return "";
+function normalizeAvatar(raw: string | undefined): string {
+  const value = (raw ?? "").trim();
+  if (!value) return "";
   try {
     // Copes with absolute, protocol-relative (//host/x.jpg) and root-relative
     // (/predownloaded/x.jpg) values — the API returns all three shapes.
-    const url = new URL(raw.startsWith("//") ? `https:${raw}` : raw, "https://codeforces.com");
+    const url = new URL(
+      value.startsWith("//") ? `https:${value}` : value,
+      "https://codeforces.com",
+    );
     if (url.protocol !== "https:") return "";
     // Match the domain rather than a fixed host list: pictures are served from
     // several Codeforces subdomains (userpic.codeforces.com, .org, and others),
     // and an unlisted one previously meant no picture at all.
     const host = url.hostname.toLowerCase();
     const allowed = AVATAR_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
-    return allowed ? url.toString() : "";
+    if (!allowed || AVATAR_PLACEHOLDER.test(url.pathname)) return "";
+    return url.toString();
   } catch {
     return "";
   }
+}
+
+/**
+ * Last-resort mirror for pictures the browser refuses to load directly.
+ *
+ * Codeforces serves user pictures from its own origin, and a cross-origin
+ * <img> is at the mercy of whatever hotlink and cross-origin-resource rules
+ * that origin applies — which is why pictures survived on the old
+ * server-rendered build (it proxied them) but not on static hosting. wsrv.nl
+ * is a public, CORS-enabled image cache; it is only ever tried after a direct
+ * load has already failed, so the common path still talks to Codeforces alone.
+ * To drop the third party entirely, make avatarChain return [direct]; cards
+ * whose picture won't load then fall back to initials.
+ */
+const AVATAR_MIRROR = "https://wsrv.nl/?n=-1&w=264&h=264&fit=cover&url=";
+
+/** A single picture, direct first and mirrored second. */
+export function avatarChain(direct: string): string[] {
+  return direct ? [direct, AVATAR_MIRROR + encodeURIComponent(direct)] : [];
+}
+
+/**
+ * Every picture worth trying for a user, best first.
+ *
+ * `titlePhoto` and `avatar` are separate uploads on Codeforces and plenty of
+ * accounts have one without the other, so both are candidates — picking the
+ * first non-empty field would leave those accounts on initials.
+ */
+export function avatarCandidates(info: CFUserInfo): string[] {
+  const sources = [
+    ...new Set([normalizeAvatar(info.titlePhoto), normalizeAvatar(info.avatar)]),
+  ].filter(Boolean);
+  // Every direct URL is tried before any mirrored one, so a picture that loads
+  // fine is never routed through a third party.
+  return [...sources, ...sources.map((s) => avatarChain(s)[1] as string)];
+}
+
+/** The single best picture URL, for callers that can only store one. */
+export function avatarUrl(info: CFUserInfo): string {
+  return avatarCandidates(info)[0] ?? "";
 }
 
 export function countryFlagEmoji(country?: string): string {

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { ATTR_ORDER, TIER_META, tierClass, type PlayerProfile, type Tier } from "@/lib/fut";
-import { avatarUrl, countryFlagEmoji } from "@/lib/codeforces";
+import { avatarCandidates, countryFlagEmoji } from "@/lib/codeforces";
+import { useAvatarSrc } from "@/hooks/useAvatar";
 import { cn } from "@/lib/utils";
 
 /** Cosmetics only. Rarity is derived from the profile and deliberately not
@@ -110,15 +110,15 @@ export function PlayerCard({
   const pattern = style?.pattern ?? "rays";
   const glow = style?.glow ?? true;
   const s = width / 320; // scale factor
-  const avatar = avatarUrl(profile.data.info);
   const flag = countryFlagEmoji(profile.data.info.country);
 
   // Codeforces user pictures are cross-origin and would taint the canvas that
   // html-to-image draws into, so PNG export always falls back to initials.
-  // `broken` covers the handles whose picture 404s or is hotlink-blocked.
-  const [broken, setBroken] = useState(false);
-  useEffect(() => setBroken(false), [avatar]);
-  const showAvatar = !!avatar && !exportMode && !broken;
+  // Everywhere else, each candidate is tried in turn — a title photo the
+  // browser won't load falls through to the account's avatar, then to a
+  // mirror, and only then to initials.
+  const { src: avatar, onError } = useAvatarSrc(avatarCandidates(profile.data.info));
+  const showAvatar = !!avatar && !exportMode;
 
   return (
     <div
@@ -187,7 +187,7 @@ export function PlayerCard({
                 alt=""
                 loading="eager"
                 referrerPolicy="no-referrer"
-                onError={() => setBroken(true)}
+                onError={onError}
                 className="h-full w-full object-cover"
               />
             ) : (

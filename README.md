@@ -43,15 +43,15 @@ _Head to head: two cards, compared attribute by attribute._
 
 ## Features
 
-| Route             | What it does                                                                                                     |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `/`               | Landing page — handle search, example cards, rating methodology, rarity tiers                                    |
-| `/generate`       | Enter a handle and generate a card                                                                               |
-| `/player/$handle` | Full public profile: card, key stats, attributes, rating chart, form, analysis, achievements, evolution          |
-| `/compare`        | Two handles side by side, attribute-by-attribute, with a neutral summary                                         |
-| `/leaderboard`    | Ranked tables by OVR, rating, solved, potential, fastest rising, most contests — global, country or organization |
-| `/squad`          | Build a five-player lineup with a squad OVR and synergy score                                                    |
-| `/pack`           | Pack-opening reveal: rarity to OVR to card                                                                       |
+| Route             | What it does                                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `/`               | Landing page — handle search, example cards, rating methodology, rarity tiers                                     |
+| `/generate`       | Enter a handle and generate a card                                                                                |
+| `/player/$handle` | Full public profile: card, key stats, attributes, rating chart, form, analysis, achievements, evolution           |
+| `/compare`        | Two handles side by side, attribute-by-attribute, with a neutral summary                                          |
+| `/leaderboard`    | Ranks the cards you have generated — OVR, potential, solved, rating gained, contests — plus a live featured table |
+| `/squad`          | Build a five-player lineup with a squad OVR and synergy score                                                     |
+| `/pack`           | Pack-opening reveal: rarity to OVR to card                                                                        |
 
 Cards can be flipped, restyled (frame, background, tier theme — visuals only,
 never the stats) and exported as PNG in front / back / both / story formats.
@@ -85,11 +85,27 @@ with a small gap to respect Codeforces rate limits and cached in the browser for
 30 minutes. Country and organization are shown only when Codeforces publishes
 them; nothing is fabricated.
 
-User pictures are loaded straight from Codeforces as ordinary images, and the
-URL is checked against a list of known Codeforces hosts first. They are
-cross-origin, so they would taint the canvas that PNG export draws into —
-exported cards therefore always show the handle's initials rather than the
-photo.
+A Codeforces account can have two separate pictures — `titlePhoto` and
+`avatar` — and the API fills the missing one with a `no-title.jpg` stand-in
+rather than leaving it blank, so a card tries both and ignores the stand-ins.
+Each URL is checked against the known Codeforces hosts before it is used.
+
+Pictures load straight from Codeforces first. If the browser refuses that load
+— a cross-origin image on a static host is subject to whatever hotlink rules
+the origin applies — the card retries once through [wsrv.nl](https://wsrv.nl),
+a public CORS-enabled image cache, and falls back to the handle's initials if
+that fails too. To drop the third party entirely, make `avatarChain` in
+`src/lib/codeforces.ts` return only the direct URL.
+
+Being cross-origin, the pictures would taint the canvas that PNG export draws
+into, so exported cards always show initials rather than the photo.
+
+### Where your cards live
+
+Generated cards are written to `localStorage` and never leave the browser: the
+site is static, with no backend and no analytics. That is why the leaderboard
+ranks the cards generated on _your_ device rather than everyone's — a shared
+board would need a server to collect them.
 
 ## Tech stack
 
