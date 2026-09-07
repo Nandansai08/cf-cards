@@ -232,9 +232,15 @@ export function CardBack({ profile, style, width = 320, exportMode = false }: Pr
         {/* methodology overlay — stays inside the card, never resizes it */}
         {methodOpen && !exportMode && (
           <div
-            className="absolute inset-0 flex flex-col"
+            className="absolute inset-0 flex flex-col overflow-y-auto"
             style={{
-              background: "color-mix(in oklab, black 82%, transparent)",
+              // Opaque, not a scrim: at 82% the card back stayed legible
+              // underneath and the two layers read as one garbled page. And an
+              // explicit colour, because the card sets --tier-ink for text on a
+              // bright tier gradient — near-black, which on a dark panel is
+              // invisible.
+              background: "oklch(0.14 0.02 265)",
+              color: "oklch(0.97 0.01 265)",
               padding: 14 * s,
             }}
             onClick={(e) => e.stopPropagation()}

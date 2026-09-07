@@ -73,3 +73,24 @@ test("comparing two handles shows both cards and a verdict", async ({ page }) =>
   await expect(page.getByRole("heading", { name: /attribute comparison/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /neutral summary/i })).toBeVisible();
 });
+
+test("the OVR explainer is readable over the card back", async ({ page }) => {
+  await page.goto("/player/demo_solver");
+  await page.getByRole("button", { name: /flip player card/i }).click();
+  await page.getByRole("button", { name: /how ovr works/i }).click();
+
+  const panel = page.locator("div", { hasText: /OVR is a calculated metric/ }).last();
+  await expect(panel).toBeVisible();
+
+  // The panel used to be an 82%-black scrim inheriting the card's near-black
+  // ink, so its own text was invisible and the card back showed through it.
+  const { background, color } = await panel.evaluate((el) => {
+    const c = getComputedStyle(el);
+    return { background: c.backgroundColor, color: c.color };
+  });
+  const alpha = (v: string) => Number(v.match(/\/\s*([\d.]+)\s*\)/)?.[1] ?? "1");
+  const lightness = (v: string) => Number(v.match(/(?:oklch|oklab)\(\s*([\d.]+)/)?.[1] ?? "0");
+
+  expect(alpha(background)).toBe(1);
+  expect(lightness(color)).toBeGreaterThan(lightness(background) + 0.4);
+});

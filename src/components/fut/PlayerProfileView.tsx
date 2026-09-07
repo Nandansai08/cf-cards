@@ -233,6 +233,35 @@ function playerUrl(handle: string): string {
   return new URL(`player/${handle}`, window.location.origin + import.meta.env.BASE_URL).toString();
 }
 
+/**
+ * Renders a node to a PNG, backing off when the canvas is too big for the
+ * device.
+ *
+ * The story frame is 1080x1920, which at 2x is an eight-megapixel canvas plus
+ * the SVG it is drawn from — enough for a phone browser to refuse or run out
+ * of memory, while the smaller single-card exports from the same page succeed.
+ * Rather than pick one safe scale for everyone, try the sharp one first and
+ * step down only where it fails.
+ */
+const PIXEL_RATIOS = [2, 1.5, 1];
+
+async function renderPng(
+  toBlob: (node: HTMLElement, options: Record<string, unknown>) => Promise<Blob | null>,
+  node: HTMLElement,
+): Promise<Blob | null> {
+  let lastError: unknown;
+  for (const pixelRatio of PIXEL_RATIOS) {
+    try {
+      const blob = await toBlob(node, { pixelRatio, cacheBust: true });
+      if (blob) return blob;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  if (lastError) throw lastError;
+  return null;
+}
+
 export function CardActions({
   profile,
   style,
@@ -261,7 +290,7 @@ export function CardActions({
     setBusy(true);
     try {
       const { toBlob } = await import("html-to-image");
-      const blob = await toBlob(node, { pixelRatio: 2, cacheBust: true });
+      const blob = await renderPng(toBlob, node);
       if (!blob) throw new Error("the card rendered empty");
       const name = `codeforces-cards-${profile.handle}-${format}.png`;
       const result = await saveBlob(blob, name);
@@ -365,7 +394,11 @@ export function CardActions({
             background: "var(--background)",
           }}
         >
-          <PlayerCard profile={profile} style={style} width={560} />
+          {/* exportMode on both faces, as with the single-card exports: it
+              swaps the cross-origin picture for initials, and drawing that
+              picture into the canvas is what made these two formats fail while
+              Front and Back worked. */}
+          <PlayerCard profile={profile} style={style} width={560} exportMode />
           <CardBack profile={profile} style={style} width={560} exportMode />
         </div>
         <div
@@ -378,7 +411,7 @@ export function CardActions({
             background: "var(--background)",
           }}
         >
-          <PlayerCard profile={profile} style={style} width={760} />
+          <PlayerCard profile={profile} style={style} width={760} exportMode />
         </div>
       </div>
     </>

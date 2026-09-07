@@ -70,3 +70,39 @@ for (const { label, file } of FORMATS) {
     expect(path).toBeTruthy();
   });
 }
+
+test("never draws the cross-origin picture into an exported canvas", async ({ page }) => {
+  // Every export renders initials instead of the photo. A picture fetched from
+  // another origin taints the canvas, and reading it back then throws — which
+  // is what broke the two formats that were still rendering it.
+  await page.route("**/codeforces.com/api/user.info**", async (route) => {
+    const url = new URL(route.request().url());
+    const handles = (url.searchParams.get("handles") ?? "").split(";").filter(Boolean);
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        status: "OK",
+        result: handles.map((h) => ({
+          ...buildPlayer("demo_solver").info,
+          handle: h,
+          titlePhoto: PICTURE,
+        })),
+      }),
+    });
+  });
+  await page.route("**userpic.codeforces.org/**", (route) =>
+    route.fulfill({ status: 200, contentType: "image/png", body: PIXEL }),
+  );
+
+  await page.goto("/player/demo_solver");
+  await expect(page.getByRole("heading", { name: "DEMO_SOLVER" })).toBeVisible();
+
+  const offscreen = page.locator(
+    "[data-export-card], [data-export-back], [data-export-both], [data-export-story]",
+  );
+  // The page renders the card actions twice, so don't pin an exact count —
+  // what matters is that no export node contains an <img>.
+  expect(await offscreen.count()).toBeGreaterThanOrEqual(4);
+  await expect(offscreen.locator("img")).toHaveCount(0);
+});
