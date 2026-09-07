@@ -1,0 +1,373 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Codeforces FUT design system — premium dark gaming aesthetic.
+ * All colors are oklch semantic tokens. Never hardcode colors in components.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-cyan: var(--cyan);
+  --color-lime: var(--lime);
+  --color-magenta: var(--magenta);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.155 0.024 265);
+  --foreground: oklch(0.975 0.006 250);
+  --surface: oklch(0.205 0.03 264);
+  --surface-2: oklch(0.255 0.036 265);
+  --card: oklch(0.205 0.03 264);
+  --card-foreground: oklch(0.975 0.006 250);
+  --popover: oklch(0.205 0.03 264);
+  --popover-foreground: oklch(0.975 0.006 250);
+  --primary: oklch(0.78 0.16 90);
+  --primary-foreground: oklch(0.18 0.03 90);
+  --secondary: oklch(0.27 0.04 265);
+  --secondary-foreground: oklch(0.97 0.006 250);
+  --muted: oklch(0.26 0.032 265);
+  --muted-foreground: oklch(0.72 0.028 262);
+  --accent: oklch(0.72 0.16 210);
+  --accent-foreground: oklch(0.16 0.03 260);
+  --destructive: oklch(0.62 0.22 22);
+  --destructive-foreground: oklch(0.98 0.01 250);
+  --border: oklch(0.34 0.035 264);
+  --input: oklch(0.3 0.035 264);
+  --ring: oklch(0.78 0.16 90);
+  --gold: oklch(0.83 0.15 88);
+  --gold-foreground: oklch(0.2 0.04 80);
+  --cyan: oklch(0.78 0.14 205);
+  --lime: oklch(0.85 0.19 130);
+  --magenta: oklch(0.68 0.22 330);
+  --chart-1: oklch(0.83 0.15 88);
+  --chart-2: oklch(0.78 0.14 205);
+  --chart-3: oklch(0.85 0.19 130);
+  --chart-4: oklch(0.68 0.22 330);
+  --chart-5: oklch(0.7 0.18 30);
+  --sidebar: oklch(0.185 0.028 265);
+  --sidebar-foreground: oklch(0.975 0.006 250);
+  --sidebar-primary: oklch(0.83 0.15 88);
+  --sidebar-primary-foreground: oklch(0.2 0.04 80);
+  --sidebar-accent: oklch(0.26 0.032 265);
+  --sidebar-accent-foreground: oklch(0.975 0.006 250);
+  --sidebar-border: oklch(0.34 0.035 264);
+  --sidebar-ring: oklch(0.83 0.15 88);
+
+  --gradient-hero: radial-gradient(
+      120% 90% at 15% 0%,
+      color-mix(in oklab, var(--accent) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      100% 80% at 85% 10%,
+      color-mix(in oklab, var(--gold) 18%, transparent),
+      transparent 55%
+    );
+  --gradient-gold: linear-gradient(150deg, oklch(0.92 0.11 95), oklch(0.74 0.16 74) 55%, oklch(0.55 0.12 62));
+  --shadow-glow: 0 0 60px -12px color-mix(in oklab, var(--gold) 55%, transparent);
+  --shadow-elevated: 0 24px 60px -24px oklch(0 0 0 / 0.75);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: var(--gradient-hero);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+}
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility panel {
+  background: color-mix(in oklab, var(--surface) 65%, transparent);
+  backdrop-filter: blur(14px);
+  border: 1px solid color-mix(in oklab, var(--border) 75%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* ---------- Card tiers ---------- */
+.tier {
+  --tier-a: oklch(0.8 0.05 260);
+  --tier-b: oklch(0.45 0.04 260);
+  --tier-ink: oklch(0.16 0.02 260);
+  --tier-glow: oklch(0.8 0.05 260);
+}
+.tier-bronze {
+  --tier-a: oklch(0.78 0.09 58);
+  --tier-b: oklch(0.42 0.08 45);
+  --tier-ink: oklch(0.2 0.04 45);
+  --tier-glow: oklch(0.72 0.11 55);
+}
+.tier-silver {
+  --tier-a: oklch(0.92 0.01 250);
+  --tier-b: oklch(0.55 0.015 255);
+  --tier-ink: oklch(0.2 0.02 255);
+  --tier-glow: oklch(0.88 0.02 250);
+}
+.tier-gold {
+  --tier-a: oklch(0.92 0.11 95);
+  --tier-b: oklch(0.6 0.13 68);
+  --tier-ink: oklch(0.22 0.05 70);
+  --tier-glow: oklch(0.85 0.15 88);
+}
+.tier-rare-gold {
+  --tier-a: oklch(0.96 0.09 100);
+  --tier-b: oklch(0.5 0.11 55);
+  --tier-ink: oklch(0.18 0.04 70);
+  --tier-glow: oklch(0.9 0.16 92);
+}
+.tier-epic {
+  --tier-a: oklch(0.82 0.17 320);
+  --tier-b: oklch(0.36 0.16 300);
+  --tier-ink: oklch(0.98 0.01 300);
+  --tier-glow: oklch(0.72 0.22 325);
+}
+.tier-icon {
+  --tier-a: oklch(0.88 0.11 205);
+  --tier-b: oklch(0.32 0.09 240);
+  --tier-ink: oklch(0.98 0.01 220);
+  --tier-glow: oklch(0.8 0.15 205);
+}
+.tier-legendary {
+  --tier-a: oklch(0.97 0.12 105);
+  --tier-b: oklch(0.32 0.11 300);
+  --tier-ink: oklch(0.16 0.03 280);
+  --tier-glow: oklch(0.9 0.18 110);
+}
+
+.card-shell {
+  background:
+    linear-gradient(160deg, var(--tier-a) 0%, var(--tier-b) 62%, var(--tier-a) 100%);
+  color: var(--tier-ink);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--tier-a) 70%, transparent),
+    0 30px 70px -30px oklch(0 0 0 / 0.85),
+    0 0 70px -30px var(--tier-glow);
+}
+
+.card-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    color-mix(in oklab, white 26%, transparent) 46%,
+    transparent 62%
+  );
+  transform: translateX(-60%);
+  transition: transform 0.9s ease;
+  pointer-events: none;
+}
+.group:hover .card-sheen::after {
+  transform: translateX(60%);
+}
+
+@keyframes fut-reveal {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) rotateY(-22deg) scale(0.82) translateY(24px);
+    filter: blur(14px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) rotateY(0) scale(1) translateY(0);
+  }
+}
+.animate-reveal {
+  animation: fut-reveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fut-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: fut-rise 0.5s ease-out both;
+}
+
+@keyframes fut-pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+.animate-pulse-glow {
+  animation: fut-pulse-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes fut-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-float {
+  animation: fut-float 6s ease-in-out infinite;
+}
+
+@keyframes fut-particle {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--px), var(--py)) scale(1.1);
+  }
+}
+.animate-particle {
+  animation: fut-particle 1.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-reveal,
+  .animate-rise,
+  .animate-pulse-glow,
+  .animate-float,
+  .animate-particle {
+    animation: none;
+  }
+}
+
+/* ---------- collectible card flip ---------- */
+.flip-perspective {
+  perspective: 1400px;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 600ms cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg);
+}
+
+.flip-face-back {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
