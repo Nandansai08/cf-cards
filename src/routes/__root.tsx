@@ -130,11 +130,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+/**
+ * Google Analytics measurement ID, or "" for no analytics at all.
+ *
+ * Set by the deploy workflow, so development, tests and anyone who forks this
+ * repository send nothing anywhere unless they configure their own property.
+ */
+const GA_ID = (import.meta.env["VITE_GA_ID"] ?? "").trim();
+
+function Analytics() {
+  if (!GA_ID) return null;
+  return (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`,
+        }}
+      />
+    </>
+  );
+}
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <Analytics />
       </head>
       <body>
         {children}

@@ -110,9 +110,14 @@ into, so exported cards always show initials rather than the photo.
 ### Where your cards live
 
 Generated cards are written to `localStorage` and never leave the browser: the
-site is static, with no backend and no analytics. That is why the leaderboard
-ranks the cards generated on _your_ device rather than everyone's — a shared
-board would need a server to collect them.
+site is static and has no backend. That is why the leaderboard ranks the cards
+generated on _your_ device rather than everyone's — a shared board would need a
+server to collect them.
+
+The deployed site does load Google Analytics, configured by `VITE_GA_ID` in the
+deploy workflow. Development builds, the test suite and any fork load no
+analytics at all, because the variable is unset there — set your own ID if you
+want measurement.
 
 ## Tech stack
 

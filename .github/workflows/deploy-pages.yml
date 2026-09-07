@@ -48,6 +48,9 @@ jobs:
           # Optional. Set the AVATAR_PROXY repository variable to the deployed
           # workers/avatar-proxy URL; unset, cards fall back to wsrv.nl.
           VITE_AVATAR_PROXY: ${{ vars.AVATAR_PROXY }}
+          # Google Analytics. Only the deployed site is measured; local builds,
+          # tests and forks load no analytics unless they set their own ID.
+          VITE_GA_ID: G-2J47GTSD29
 
       - uses: actions/upload-pages-artifact@v3
         with:
