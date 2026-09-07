@@ -101,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // prerendered shell, which is what the crawler fetches.
       {
         name: "google-site-verification",
-        content: "y1O1BGH4_pGHJ1NHwjdpYP8nvudsX1BXIAdFhYrkWTU",
+        content: "h8bkfv1nFiD-3KpPbctvJFccsO2CFhPo-VR4TntHBYs",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Codeforces Cards" },
