@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, claude/codeforces-cards-website-8phloq]
+    branches: [main]
   pull_request:
 
 permissions:

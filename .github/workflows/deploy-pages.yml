@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [claude/codeforces-cards-website-8phloq]
+    branches: [main]
   workflow_dispatch:
 
 # GITHUB_TOKEN needs these for actions/deploy-pages to publish.
