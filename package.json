@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "screenshots": "playwright test --project=screenshots",
     "test": "playwright test --project=e2e",
-    "test:ui": "playwright test --project=e2e --ui"
+    "test:ui": "playwright test --project=e2e --ui",
+    "test:worker": "node --test workers/avatar-proxy/test.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"

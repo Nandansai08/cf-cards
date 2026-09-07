@@ -90,11 +90,18 @@ A Codeforces account can have two separate pictures — `titlePhoto` and
 rather than leaving it blank, so a card tries both and ignores the stand-ins.
 Each URL is checked against the known Codeforces hosts before it is used.
 
-Pictures load straight from Codeforces first. If the browser refuses that load
-— a cross-origin image on a static host is subject to whatever hotlink rules
-the origin applies — the card retries once through [wsrv.nl](https://wsrv.nl),
-a public CORS-enabled image cache, and falls back to the handle's initials if
-that fails too. To drop the third party entirely, make `avatarChain` in
+Pictures load straight from Codeforces first. That often fails on any other
+origin: Codeforces refuses its userpic images to a foreign referer, which is
+why the same URL opens fine in a tab from Codeforces itself and nowhere else.
+The card then retries once through a proxy, and falls back to the handle's
+initials if that fails too.
+
+Which proxy depends on `VITE_AVATAR_PROXY`. Set it to a deployed
+[`workers/avatar-proxy`](workers/avatar-proxy) — a small Cloudflare Worker that
+asks Codeforces with the referer it expects and re-serves the bytes with
+permissive CORS headers — and pictures work. Leave it unset and the fallback is
+[wsrv.nl](https://wsrv.nl), a public image cache, which fetches server-side and
+so is often refused for the same reason. To drop both, make `avatarChain` in
 `src/lib/codeforces.ts` return only the direct URL.
 
 Being cross-origin, the pictures would taint the canvas that PNG export draws

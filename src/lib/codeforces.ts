@@ -235,22 +235,32 @@ function normalizeAvatar(raw: string | undefined): string {
 }
 
 /**
- * Last-resort mirror for pictures the browser refuses to load directly.
+ * Fallback for pictures the browser refuses to load directly.
  *
- * Codeforces serves user pictures from its own origin, and a cross-origin
- * <img> is at the mercy of whatever hotlink and cross-origin-resource rules
- * that origin applies — which is why pictures survived on the old
- * server-rendered build (it proxied them) but not on static hosting. wsrv.nl
- * is a public, CORS-enabled image cache; it is only ever tried after a direct
- * load has already failed, so the common path still talks to Codeforces alone.
- * To drop the third party entirely, make avatarChain return [direct]; cards
- * whose picture won't load then fall back to initials.
+ * Codeforces refuses its userpic images to a foreign referer, so a card's
+ * <img> gets nothing while the same URL opens fine from Codeforces itself.
+ * That is what the old server-rendered build hid by proxying every image, and
+ * what static hosting cannot do on its own.
+ *
+ * VITE_AVATAR_PROXY points at workers/avatar-proxy, which asks Codeforces the
+ * way it expects and re-serves the bytes with permissive CORS headers. With it
+ * unset the fallback is wsrv.nl, a public image cache — worth trying, though
+ * it fetches server-side and is refused for the same reason often enough that
+ * the Worker is the fix. Either way it is only reached after a direct load has
+ * already failed, so the common path still talks to Codeforces alone.
  */
+const AVATAR_PROXY = (import.meta.env["VITE_AVATAR_PROXY"] ?? "").replace(/\/+$/, "");
 const AVATAR_MIRROR = "https://wsrv.nl/?n=-1&w=264&h=264&fit=cover&url=";
 
-/** A single picture, direct first and mirrored second. */
+function viaProxy(direct: string): string {
+  return AVATAR_PROXY
+    ? `${AVATAR_PROXY}/?url=${encodeURIComponent(direct)}`
+    : AVATAR_MIRROR + encodeURIComponent(direct);
+}
+
+/** A single picture, direct first and proxied second. */
 export function avatarChain(direct: string): string[] {
-  return direct ? [direct, AVATAR_MIRROR + encodeURIComponent(direct)] : [];
+  return direct ? [direct, viaProxy(direct)] : [];
 }
 
 /**

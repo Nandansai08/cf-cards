@@ -33,6 +33,9 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      - name: Test the avatar proxy Worker
+        run: npm run test:worker
+
       - name: Build (server)
         run: npm run build
 
