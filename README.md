@@ -77,7 +77,7 @@ Codeforces API directly.
 
 ## Development
 
-Requires Node.js 20+.
+Requires Node.js 22+ (some TanStack packages declare `node >=22.12`).
 
 ```sh
 npm install
@@ -104,6 +104,10 @@ npm run build:pages
 
 The site is a fully static single-page app, published to GitHub Pages by
 `.github/workflows/deploy-pages.yml` on every push to the default branch.
+
+Pages has to be turned on once by hand before the first deploy — a workflow
+token is not allowed to do it. In **Settings → Pages**, set **Source** to
+**GitHub Actions**, then re-run the workflow.
 
 ```sh
 BASE_PATH=/cf-cards/ npm run build:pages   # -> dist/pages, ready to upload

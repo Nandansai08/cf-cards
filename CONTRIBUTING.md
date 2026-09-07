@@ -7,7 +7,7 @@ By participating you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## Getting set up
 
-You need Node.js 20 or newer.
+You need Node.js 22 or newer — some TanStack packages declare `node >=22.12`.
 
 ```sh
 git clone https://github.com/Nandansai08/cf-cards.git
