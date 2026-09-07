@@ -64,6 +64,24 @@ new ones with the shadcn CLI as you need them rather than in bulk.
 make it look worse on mobile, or that push it below the fold, are unlikely to
 be merged.
 
+## Regenerating the README screenshots
+
+```sh
+npm run dev                                   # in one terminal
+CHROMIUM_PATH=/path/to/chromium npm run screenshots
+```
+
+Output lands in `docs/screenshots/`. The script stubs the Codeforces API with
+generated demo players rather than hitting real handles: that keeps the images
+reproducible, keeps us off Codeforces' rate limits, and avoids publishing a card
+that pins invented statistics on a real person. The app is not modified — the
+real rating engine runs over the fixture data.
+
+`playwright-core` ships without browsers to keep `npm ci` small, so point
+`CHROMIUM_PATH` at a Chromium binary, or leave it unset to use a locally
+installed Chrome. If you change the UI in a way the screenshots show, please
+regenerate them in the same pull request.
+
 ## Working on the rating engine
 
 `src/lib/fut.ts` has one rule above all others: **it must stay deterministic.**

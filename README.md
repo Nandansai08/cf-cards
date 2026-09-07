@@ -14,6 +14,33 @@ achievements and full rating history — all computed from public Codeforces dat
 handle's public Codeforces history, so the same handle always produces the same
 card. The full methodology is documented in-app on `/about`.
 
+## Screenshots
+
+![The player profile: card, key statistics, attributes and rating history](docs/screenshots/player.png)
+
+_The player profile — the card, key statistics, the six attributes and the full
+rating history._
+
+![Landing page](docs/screenshots/home.png)
+
+_Landing page._
+
+![Two players compared attribute by attribute](docs/screenshots/compare.png)
+
+_Head to head: two cards, compared attribute by attribute._
+
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="A player card on a phone" width="300">
+</p>
+
+<p align="center"><em>The card is the centrepiece on a phone too.</em></p>
+
+> These screenshots are rendered from generated demo players, not real handles,
+> so they stay reproducible and don't attach invented statistics to a real
+> person. The app itself is unmodified — the actual rating engine produced every
+> number you see. Regenerate them with `npm run screenshots` (see
+> [CONTRIBUTING.md](CONTRIBUTING.md)).
+
 ## Features
 
 | Route             | What it does                                                                                                     |
