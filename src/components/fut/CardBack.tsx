@@ -32,7 +32,7 @@ function Sparkline({ points, width, height }: { points: number[]; width: number;
 }
 
 export function CardBack({ profile, style, width = 320, exportMode = false }: Props) {
-  const tier = style?.tier ?? profile.tier;
+  const tier = profile.tier;
   const s = width / 320;
   const [methodOpen, setMethodOpen] = useState(false);
   const st = profile.stats;

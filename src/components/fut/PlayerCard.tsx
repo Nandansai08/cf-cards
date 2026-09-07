@@ -3,8 +3,9 @@ import { ATTR_ORDER, TIER_META, tierClass, type PlayerProfile, type Tier } from 
 import { avatarUrl, countryFlagEmoji } from "@/lib/codeforces";
 import { cn } from "@/lib/utils";
 
+/** Cosmetics only. Rarity is derived from the profile and deliberately not
+ * overridable — see the tier scale in src/lib/fut.ts. */
 export interface CardStyleOptions {
-  tier?: Tier | undefined;
   frame?: "classic" | "sharp" | "soft" | undefined;
   pattern?: "rays" | "grid" | "plain" | undefined;
   glow?: boolean | undefined;
@@ -104,7 +105,7 @@ export function PlayerCard({
   exportMode = false,
   noHover = false,
 }: Props) {
-  const tier = style?.tier ?? profile.tier;
+  const tier = profile.tier;
   const frame = style?.frame ?? "classic";
   const pattern = style?.pattern ?? "rays";
   const glow = style?.glow ?? true;

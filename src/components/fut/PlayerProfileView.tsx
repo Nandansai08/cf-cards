@@ -27,8 +27,6 @@ import {
 } from "@/lib/fut";
 import { cn } from "@/lib/utils";
 
-const TIERS: Tier[] = ["bronze", "silver", "gold", "rare-gold", "epic", "icon", "legendary"];
-
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return <h2 className="font-display text-lg font-bold uppercase text-foreground">{children}</h2>;
 }
@@ -367,11 +365,11 @@ export function CardActions({
 export function CustomizePanel({
   value,
   onChange,
-  defaultTier,
+  tier,
 }: {
   value: CardStyleOptions;
   onChange: (value: CardStyleOptions) => void;
-  defaultTier: Tier;
+  tier: Tier;
 }) {
   return (
     <details className="border-t border-border/60 pt-3 text-sm text-muted-foreground">
@@ -379,12 +377,10 @@ export function CustomizePanel({
         <Sliders className="h-4 w-4" /> Card appearance
       </summary>
       <div className="mt-3 space-y-3">
-        <Choice
-          label="Frame theme"
-          options={TIERS}
-          active={value.tier ?? defaultTier}
-          onPick={(tier) => onChange({ ...value, tier: tier as Tier })}
-        />
+        <p className="text-xs">
+          Rarity is <span className="text-foreground">{TIER_META[tier].label}</span>, set by your
+          OVR — it isn't something you can pick. Shape and background are yours.
+        </p>
         <Choice
           label="Frame"
           options={["classic", "sharp", "soft"]}
@@ -458,7 +454,7 @@ export function PlayerProfileView({ profile }: { profile: PlayerProfile }) {
               <CardActions profile={profile} style={style} />
             </div>
             <div className="mt-4 hidden lg:block">
-              <CustomizePanel value={style} onChange={setStyle} defaultTier={profile.tier} />
+              <CustomizePanel value={style} onChange={setStyle} tier={profile.tier} />
             </div>
           </div>
         </div>
@@ -512,7 +508,7 @@ export function PlayerProfileView({ profile }: { profile: PlayerProfile }) {
 
           <section aria-label="Card actions" className="space-y-4 lg:hidden">
             <CardActions profile={profile} style={style} />
-            <CustomizePanel value={style} onChange={setStyle} defaultTier={profile.tier} />
+            <CustomizePanel value={style} onChange={setStyle} tier={profile.tier} />
           </section>
 
           <Tabs defaultValue="form" id="playstyle">

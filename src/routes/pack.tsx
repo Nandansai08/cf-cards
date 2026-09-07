@@ -29,24 +29,30 @@ export const Route = createFileRoute("/pack")({
 type Phase = "idle" | "shaking" | "rarity" | "ovr" | "card";
 
 function PackPage() {
-  const [handle, setHandle] = useState("");
+  // `nonce` makes every submission a distinct request, so re-opening the same
+  // handle replays the animation instead of being a no-op state update.
+  const [pack, setPack] = useState({ handle: "", nonce: 0 });
   const [phase, setPhase] = useState<Phase>("idle");
-  const { data, isPending, error } = usePlayer(handle);
+  const { data, isPending, error } = usePlayer(pack.handle);
 
+  // One effect owns the whole reveal. It has to react to `data` as well as the
+  // request, because a handle that is already in the query cache (the landing
+  // page pre-loads its showcase handles) resolves in the very same render that
+  // starts the pack — there is no later commit to hang a second effect off.
   useEffect(() => {
-    if (!handle) return;
+    if (!pack.handle) {
+      setPhase("idle");
+      return;
+    }
     setPhase("shaking");
-  }, [handle]);
-
-  useEffect(() => {
-    if (!data || phase === "idle") return;
+    if (!data) return; // still loading, or failed — rerun once data lands
     const timers = [
       window.setTimeout(() => setPhase("rarity"), 700),
       window.setTimeout(() => setPhase("ovr"), 1700),
       window.setTimeout(() => setPhase("card"), 2600),
     ];
     return () => timers.forEach(window.clearTimeout);
-  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pack.handle, pack.nonce, data]);
 
   const particles = useMemo(
     () =>
@@ -72,12 +78,9 @@ function PackPage() {
 
       <div className="mx-auto mt-8 max-w-xl">
         <HandleForm
-          onSubmit={(h) => {
-            setPhase("idle");
-            setHandle(h);
-          }}
+          onSubmit={(h) => setPack((prev) => ({ handle: h, nonce: prev.nonce + 1 }))}
           cta="Open pack"
-          busy={!!handle && isPending}
+          busy={!!pack.handle && isPending}
         />
       </div>
 
@@ -149,8 +152,7 @@ function PackPage() {
               <Button
                 variant="secondary"
                 onClick={() => {
-                  setPhase("idle");
-                  setHandle("");
+                  setPack((prev) => ({ handle: "", nonce: prev.nonce + 1 }));
                 }}
                 className="font-display uppercase tracking-wider"
               >

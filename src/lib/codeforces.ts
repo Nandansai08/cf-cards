@@ -198,28 +198,31 @@ export async function fetchPlayerData(rawHandle: string): Promise<CFPlayerData> 
   return data;
 }
 
-const AVATAR_HOSTS = new Set([
-  "userpic.codeforces.org",
-  "userpic.codeforces.com",
-  "codeforces.org",
-  "codeforces.com",
-  "sta.codeforces.com",
-]);
+const AVATAR_DOMAINS = ["codeforces.com", "codeforces.org"];
 
 /**
  * Absolute https URL for a user's picture, or "" if there isn't a usable one.
  * Loaded straight from Codeforces as a plain <img>, so the app stays fully
- * static. Restricted to known Codeforces hosts so a hostile API response
- * can't point the card at an arbitrary origin.
+ * static. Restricted to Codeforces domains so a hostile API response can't
+ * point the card at an arbitrary origin.
  */
 export function avatarUrl(info: CFUserInfo): string {
-  const raw = info.titlePhoto ?? info.avatar ?? "";
+  // `||`, not `??`: Codeforces returns an empty string for some accounts, and
+  // an empty titlePhoto should fall through to the smaller avatar rather than
+  // give up on a picture entirely.
+  const raw = (info.titlePhoto || info.avatar || "").trim();
   if (!raw) return "";
-  const abs = raw.startsWith("//") ? `https:${raw}` : raw;
   try {
-    const url = new URL(abs);
-    if (url.protocol !== "https:" || !AVATAR_HOSTS.has(url.hostname)) return "";
-    return url.toString();
+    // Copes with absolute, protocol-relative (//host/x.jpg) and root-relative
+    // (/predownloaded/x.jpg) values — the API returns all three shapes.
+    const url = new URL(raw.startsWith("//") ? `https:${raw}` : raw, "https://codeforces.com");
+    if (url.protocol !== "https:") return "";
+    // Match the domain rather than a fixed host list: pictures are served from
+    // several Codeforces subdomains (userpic.codeforces.com, .org, and others),
+    // and an unlisted one previously meant no picture at all.
+    const host = url.hostname.toLowerCase();
+    const allowed = AVATAR_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
+    return allowed ? url.toString() : "";
   } catch {
     return "";
   }
