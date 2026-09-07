@@ -96,6 +96,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Turn any Codeforces handle into a football-style player card: OVR, six attributes, rarity and badges, all calculated from public contest data.",
       },
+      // Google Search Console ownership proof. The DNS-record form of this
+      // token can't be used here — github.io isn't ours — so it goes in the
+      // prerendered shell, which is what the crawler fetches.
+      {
+        name: "google-site-verification",
+        content: "y1O1BGH4_pGHJ1NHwjdpYP8nvudsX1BXIAdFhYrkWTU",
+      },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Codeforces Cards" },
       { property: "og:url", content: SITE_URL },
