@@ -105,6 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Codeforces Cards" },
+      { name: "application-name", content: "Codeforces Cards" },
       { property: "og:url", content: SITE_URL },
       { property: "og:image", content: `${SITE_URL}/og.png` },
       { property: "og:image:width", content: "1200" },
@@ -152,11 +153,34 @@ function Analytics() {
   );
 }
 
+/**
+ * Names the site for search engines.
+ *
+ * Google takes a result's site name from the domain root, so on a github.io
+ * *project* site this is only a hint — the root belongs to GitHub, which is
+ * why results read "GitHub Pages documentation". It becomes authoritative the
+ * moment the site moves to a custom domain or the owner's user site, and it is
+ * correct markup either way.
+ */
+function SiteSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Codeforces Cards",
+    alternateName: "CF Cards",
+    url: `${SITE_URL}/`,
+    description:
+      "Turn any Codeforces handle into a football-style player card: an OVR rating, six attributes, a rarity tier and badges, calculated from public contest history.",
+  };
+  return <script type="application/ld+json">{JSON.stringify(schema)}</script>;
+}
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <SiteSchema />
         <Analytics />
       </head>
       <body>

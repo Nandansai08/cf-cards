@@ -48,6 +48,15 @@ for (const route of ROUTES) {
   await writeFile(join(outDir, route, "index.html"), html);
 }
 
+// Written here rather than kept in public/, so it always points at wherever
+// the site is actually deployed. (On a github.io project site crawlers ignore
+// it anyway — robots.txt is only read at the domain root — but it is correct
+// the moment the site moves to a custom domain or the owner's user site.)
+await writeFile(
+  join(outDir, "robots.txt"),
+  `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`,
+);
+
 const today = new Date().toISOString().slice(0, 10);
 const urls = ["", ...ROUTES]
   .map(
@@ -61,5 +70,5 @@ await writeFile(
 );
 
 console.log(
-  `Pages site ready in ${outDir}/ (index.html, 404.html, .nojekyll, sitemap.xml, ${ROUTES.length} route pages)`,
+  `Pages site ready in ${outDir}/ (index.html, 404.html, .nojekyll, robots.txt, sitemap.xml, ${ROUTES.length} route pages)`,
 );

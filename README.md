@@ -219,8 +219,19 @@ GitHub Pages serves `404.html` with an HTTP 404 status and search engines do not
 index a page that answers 404 — without those files only the home page was
 indexable. It also writes `sitemap.xml` from `SITE_URL`.
 
-Two things are worth knowing. `robots.txt` is only honoured at the origin root,
-so `…github.io/cf-cards/robots.txt` is ignored by crawlers — submit the sitemap
-in Google Search Console instead, or move the site to a custom domain. And no
-amount of markup substitutes for being linked to: a new site with no inbound
-links takes weeks to rank for anything.
+Both are written from `SITE_URL`, which the deploy derives from the repository
+name: a repository called `<owner>.github.io` is served from the domain root,
+anything else from `/<repo>/`. Renaming the repository is therefore all it
+takes to move the site to the root — no URL is written down anywhere.
+
+Three limits are worth knowing about a github.io **project** site, and all
+three go away at the domain root or on a custom domain:
+
+- `robots.txt` is only read at the origin root, so `…github.io/cf-cards/robots.txt`
+  is ignored by crawlers. Submit the sitemap in Google Search Console instead.
+- Google derives a result's **site name** from the domain root too, which on a
+  project site belongs to GitHub — hence results labelled "GitHub Pages
+  documentation". The `WebSite` structured data and `og:site_name` here are only
+  hints until the site owns its root.
+- No markup substitutes for being linked to: a new site with no inbound links
+  takes weeks to rank for anything.

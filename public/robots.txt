@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://nandansai08.github.io/cf-cards/sitemap.xml

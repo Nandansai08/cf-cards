@@ -32,6 +32,29 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # A repository named <owner>.github.io is served from the domain root;
+      # every other repository is served from /<repo>/. Renaming the repository
+      # therefore changes every absolute URL on the site, so the paths are
+      # derived here rather than written down.
+      - name: Work out where the site will live
+        run: |
+          owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          repo="${{ github.event.repository.name }}"
+          if [ "$(echo "$repo" | tr '[:upper:]' '[:lower:]')" = "$owner.github.io" ]; then
+            base="/"
+            site="https://$owner.github.io"
+          else
+            base="/$repo/"
+            site="https://$owner.github.io/$repo"
+          fi
+          echo "Base path: $base"
+          echo "Site URL:  $site"
+          {
+            echo "BASE_PATH=$base"
+            echo "SITE_URL=$site"
+            echo "VITE_SITE_URL=$site"
+          } >> "$GITHUB_ENV"
+
       - name: Build
         # Pages serves a project site from https://<owner>.github.io/<repo>/, so
         # every asset and route needs that prefix. Derived from the repo name so
@@ -39,12 +62,7 @@ jobs:
         # the site to a custom domain, set this to "/" instead.
         run: npm run build:pages
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
-          # Absolute URL of the deployed site. Canonical links, Open Graph tags
-          # and sitemap.xml all need one, and the static build has no request to
-          # derive it from.
-          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
-          VITE_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          # BASE_PATH, SITE_URL and VITE_SITE_URL come from the step above.
           # Optional. Set the AVATAR_PROXY repository variable to the deployed
           # workers/avatar-proxy URL; unset, cards fall back to wsrv.nl.
           VITE_AVATAR_PROXY: ${{ vars.AVATAR_PROXY }}
