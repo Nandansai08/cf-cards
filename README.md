@@ -108,9 +108,12 @@ Requires Node.js 22+ (some TanStack packages declare `node >=22.12`).
 
 ```sh
 npm install
-npm run dev      # dev server
-npm run build    # production build
-npm run lint     # eslint
+npm run dev        # dev server
+npm run build      # production build
+npm run build:pages # static build, as published
+npm run preview    # serve the static build the way GitHub Pages does
+npm test           # end-to-end tests (Playwright)
+npm run lint       # eslint
 ```
 
 Routes live in `src/routes/` (file-based — `routeTree.gen.ts` is generated, do
@@ -125,7 +128,11 @@ npm run lint
 npx tsc --noEmit
 npm run build
 npm run build:pages
+npm test
 ```
+
+Tests run against the production build with the Codeforces API stubbed, so they
+never touch the real API. See [CONTRIBUTING.md](CONTRIBUTING.md#tests).
 
 ## Deployment
 

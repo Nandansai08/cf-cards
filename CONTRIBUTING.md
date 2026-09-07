@@ -23,10 +23,11 @@ API from the browser.
 ## Checks to run before you push
 
 ```sh
-npm run lint       # eslint + prettier, must report zero errors
-npx tsc --noEmit   # typecheck, must be clean
-npm run build      # production build, must succeed
+npm run lint        # eslint + prettier, must report zero errors
+npx tsc --noEmit    # typecheck, must be clean
+npm run build       # production build, must succeed
 npm run build:pages # the static build that actually gets published
+npm test            # end-to-end tests
 ```
 
 CI runs exactly these on every pull request. `npm run format` will fix
@@ -64,23 +65,45 @@ new ones with the shadcn CLI as you need them rather than in bulk.
 make it look worse on mobile, or that push it below the fold, are unlikely to
 be merged.
 
+## Tests
+
+```sh
+npm test        # headless
+npm run test:ui # Playwright's UI mode, good for debugging a failure
+```
+
+Playwright starts the server itself, so there is nothing to run first. Two
+things about the setup are deliberate:
+
+- **Tests run against the production build** (`npm run build:pages`, served by
+  `scripts/serve-static.mjs`), not the dev server. That is what actually ships,
+  and in dev the client loads hundreds of unbundled modules, so hydration is
+  slow enough to make every interaction test flaky.
+- **The Codeforces API is always stubbed** (`tests/fixtures/codeforces.ts`).
+  Tests must never hit codeforces.com: it would make them slow, flaky and
+  dependent on live data, and it would put load on a public API we don't own.
+  Demo players come from a seeded PRNG, so a handle always produces the same
+  card and assertions can be exact.
+
+Browsers are not bundled with the install. `npx playwright install chromium`
+fetches one, or set `CHROMIUM_PATH` to a browser you already have.
+
+When you fix a bug, add the test first and **watch it fail** before you fix it.
+The pack-reveal regression in `tests/pack.spec.ts` is a cautionary tale: the
+first two versions of that test passed against the broken code, once because
+they reloaded the page (which wipes the query cache the bug depends on) and
+once because the assertion matched an unrelated chip in the form.
+
 ## Regenerating the README screenshots
 
 ```sh
-npm run dev                                   # in one terminal
-CHROMIUM_PATH=/path/to/chromium npm run screenshots
+npm run screenshots
 ```
 
-Output lands in `docs/screenshots/`. The script stubs the Codeforces API with
-generated demo players rather than hitting real handles: that keeps the images
-reproducible, keeps us off Codeforces' rate limits, and avoids publishing a card
-that pins invented statistics on a real person. The app is not modified — the
-real rating engine runs over the fixture data.
-
-`playwright-core` ships without browsers to keep `npm ci` small, so point
-`CHROMIUM_PATH` at a Chromium binary, or leave it unset to use a locally
-installed Chrome. If you change the UI in a way the screenshots show, please
-regenerate them in the same pull request.
+Output lands in `docs/screenshots/`. This is a separate Playwright project
+(`tests/screenshots.spec.ts`), so `npm test` never runs it, and it uses the same
+stubbed demo players as the tests. If you change the UI in a way the screenshots
+show, please regenerate them in the same pull request.
 
 ## Working on the rating engine
 
