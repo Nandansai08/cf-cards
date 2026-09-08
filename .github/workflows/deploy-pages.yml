@@ -69,6 +69,10 @@ jobs:
           # Google Analytics. Only the deployed site is measured; local builds,
           # tests and forks load no analytics unless they set their own ID.
           VITE_GA_ID: G-2J47GTSD29
+          # Google AdSense. Same gating as analytics — nothing loads anywhere
+          # else. ads.txt is generated from this too.
+          VITE_ADSENSE_CLIENT: ca-pub-6502365361842299
+          ADSENSE_CLIENT: ca-pub-6502365361842299
 
       - uses: actions/upload-pages-artifact@v3
         with:

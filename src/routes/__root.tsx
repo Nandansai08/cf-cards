@@ -175,6 +175,25 @@ function SiteSchema() {
   return <script type="application/ld+json">{JSON.stringify(schema)}</script>;
 }
 
+/**
+ * Google AdSense publisher ID, or "" for no ads.
+ *
+ * Gated the same way as analytics: only the deploy sets it, so development,
+ * tests and forks load nothing from an ad network.
+ */
+const ADSENSE_CLIENT = (import.meta.env["VITE_ADSENSE_CLIENT"] ?? "").trim();
+
+function AdSense() {
+  if (!ADSENSE_CLIENT) return null;
+  return (
+    <script
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+      crossOrigin="anonymous"
+    />
+  );
+}
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
@@ -182,6 +201,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <SiteSchema />
         <Analytics />
+        <AdSense />
       </head>
       <body>
         {children}

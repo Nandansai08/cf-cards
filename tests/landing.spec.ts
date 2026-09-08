@@ -43,16 +43,18 @@ test("recovers when Codeforces comes back", async ({ page }) => {
   await expect(page.getByText("DEMO_SOLVER").first()).toBeVisible({ timeout: 20_000 });
 });
 
-test("loads no analytics unless a measurement ID is configured", async ({ page }) => {
-  // The ID is set only by the deploy workflow. A hardcoded one would send
-  // every fork's and every contributor's traffic to somebody else's property.
-  const gtag: string[] = [];
+test("loads no analytics or ads unless they are configured", async ({ page }) => {
+  // Both IDs are set only by the deploy workflow. Hardcoding either would send
+  // every fork's and every contributor's traffic to somebody else's account.
+  const third: string[] = [];
   page.on("request", (r) => {
-    if (/googletagmanager|google-analytics/.test(r.url())) gtag.push(r.url());
+    if (/googletagmanager|google-analytics|googlesyndication|doubleclick/.test(r.url())) {
+      third.push(r.url());
+    }
   });
 
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-  expect(gtag).toEqual([]);
+  expect(third).toEqual([]);
 });

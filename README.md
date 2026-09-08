@@ -114,10 +114,12 @@ site is static and has no backend. That is why the leaderboard ranks the cards
 generated on _your_ device rather than everyone's — a shared board would need a
 server to collect them.
 
-The deployed site does load Google Analytics, configured by `VITE_GA_ID` in the
-deploy workflow. Development builds, the test suite and any fork load no
-analytics at all, because the variable is unset there — set your own ID if you
-want measurement.
+The deployed site loads Google Analytics and Google AdSense, configured by
+`VITE_GA_ID` and `VITE_ADSENSE_CLIENT` in the deploy workflow. Development
+builds, the test suite and any fork load neither, because those variables are
+unset there — set your own IDs if you want measurement or ads. `ads.txt` is
+generated from `ADSENSE_CLIENT` for the same reason, so a fork never claims
+someone else's ad inventory.
 
 ## Tech stack
 
@@ -235,3 +237,8 @@ three go away at the domain root or on a custom domain:
   hints until the site owns its root.
 - No markup substitutes for being linked to: a new site with no inbound links
   takes weeks to rank for anything.
+
+AdSense has the same root-only problem, and harder: `ads.txt` is read from the
+domain root, and AdSense expects a publisher to own the domain they monetise.
+A `*.github.io` address is shared hosting, so approval there is unlikely — a
+custom domain is effectively a prerequisite for ads, not a nicety.

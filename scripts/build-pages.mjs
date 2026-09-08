@@ -57,6 +57,14 @@ await writeFile(
   `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`,
 );
 
+// AdSense reads ads.txt from the site root to confirm who may sell the ad
+// space. Written only when a publisher is configured, so a fork never claims
+// someone else's inventory.
+const adsense = (process.env["ADSENSE_CLIENT"] ?? "").trim().replace(/^ca-/, "");
+if (adsense) {
+  await writeFile(join(outDir, "ads.txt"), `google.com, ${adsense}, DIRECT, f08c47fec0942fa0\n`);
+}
+
 const today = new Date().toISOString().slice(0, 10);
 const urls = ["", ...ROUTES]
   .map(
